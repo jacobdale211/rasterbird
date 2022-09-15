@@ -1,3 +1,6 @@
-path <- dir("/Users/jacobdale/tryitout/rasterbird/data/data-raw/", pattern = ".tif", full.names = TRUE)
+path <- dir("./data/data-raw/", pattern = ".tif", full.names = TRUE)
 dat <- lapply(path, read_stars, proxy = TRUE)
-dat <- lapply(dat, st_transform, crs = 4326)
+
+
+venter <- stars::read_stars("./data/data-raw/venter/Dryadv3/Maps/croplands2005.tif")
+summary(venter)
