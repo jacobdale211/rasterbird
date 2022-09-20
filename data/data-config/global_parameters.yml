@@ -1,0 +1,13 @@
+project: rasterbird
+grid:
+  bbox:
+    xmin: -100 
+    ymin: 0
+    xmax: 0
+    ymax: 90
+  cellsize: 1
+  crs: 4326
+data:
+  halpern:
+    - fertilizer
+    - shipping
