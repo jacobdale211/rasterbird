@@ -9,7 +9,7 @@
 # In that case I would modify the name of the file to 02-data-import.R
 
 # I will move this data 02-data-crop.R, but comment on it here
-path <- dir("./data/data-raw/", pattern = ".tif", full.names = TRUE) # This path does not work, the data is in data/data-raw/halpern/
+path <- dir("./data/data-raw/halpern/", pattern = ".tif", full.names = TRUE)
 halpern <- lapply(path, read_stars, proxy = TRUE) # change data name to be more specific if you are importing multiple files 
 venter <- stars::read_stars("./data/data-raw/venter/Dryadv3/Maps/croplands2005.tif")
 #summary(venter) # do not run this type of code in a script unless you are using elements of the summary in the script. It's for exploration only. Either remove it, or put it as a comment if you want to have it ready for use. 
