@@ -10,6 +10,7 @@ path_halpern <- dir("./data/data-raw/halpern/raw_2008_halpern/", pattern = ".tif
                                       #missing value where TRUE/FALSE needed
 
 dat_halpern <- lapply(path_halpern, stars::read_stars, proxy = TRUE)
+View(dat_halpern)
 
 #venter
 path_venter <- dir("./data/data-raw/venter/Dryadv3/Maps/info/", pattern = ".tif", full.names = TRUE)

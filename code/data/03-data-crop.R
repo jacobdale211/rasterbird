@@ -37,3 +37,7 @@ for(i in 1:length(venter)) {
     dsn = glue::glue("data/data-format/venter-{nm}.tif")
   )
 } 
+
+# Small brange
+brange_small = brange[1:1,]
+sf::st_area(brange_small)

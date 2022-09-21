@@ -1,10 +1,5 @@
-brange <- st_transform(brange, crs = st_crs(stressor))
-ext <- st_bbox(brange)
-stressor <- st_crop(stressor, ext)
+stressor = dat_halpern[1]
 
-#grid
-brange_buffer <- st_buffer(brange, 10000)
-grid <- st_make_grid(brange_buffer, n = c(20,20))
-uid <- st_intersects(brange_buffer, grid) |> unlist() |> sort()
-uid
-grid <- grid[uid]
+brange_small <- stars::st_transform(brange_small, crs = sf::st_crs(stressor))
+ext <- sf::st_bbox(brange_small)
+stressor <- sf::st_crop(stressor, ext)

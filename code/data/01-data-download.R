@@ -1,12 +1,4 @@
-# COMMENT: 
-# This script does not download the data, it imports them to R for use in other analyses.
-# It means that there is a step missing, that of downloading the data directly from the web
-# In case the data is not downloaded from the web (e.g. bird data), I would still document it and provide information. 
-# You can either have individual scripts for each dataset, or perform all the downloads in a single 
-# script, it's up to you. 
-# In the end, though, this code here should either be part of individual scripts, meaning that you 
-# use it when you need to work with the data in a script, or you use it to import the data. 
-# In that case I would modify the name of the file to 02-data-import.R
+
 
 # I will move this data 02-data-crop.R, but comment on it here
 path <- dir("./data/data-raw/halpern/", pattern = ".tif", full.names = TRUE)
