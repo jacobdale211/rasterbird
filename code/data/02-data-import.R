@@ -1,5 +1,5 @@
 brange <- sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
-
+brange_small = brange[1,1,]
 #halpern
 #path_halpern <- dir("./data/data-raw/halpern/raw_2008_halpern/", pattern = ".tif", full.names = TRUE)
 

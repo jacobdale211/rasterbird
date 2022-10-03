@@ -1,5 +1,5 @@
 source("./code/figures/01-studyarea.R")
-
+source("./code/functions/renormalization.R")
 x=stressor
 class(x)
 x <- stars::st_as_stars(stressor)
