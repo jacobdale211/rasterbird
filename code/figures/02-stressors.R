@@ -1,3 +1,5 @@
+source("./code/figures/01-studyarea.R")
+
 x=stressor
 class(x)
 x <- stars::st_as_stars(stressor)
