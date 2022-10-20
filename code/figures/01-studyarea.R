@@ -1,10 +1,8 @@
-brange <- st_transform(brange, crs = st_crs(stressor))
-ext <- st_bbox(brange)
-stressor <- st_crop(stressor, ext)
+source("./code/data/02-data-import.R")
 
-#grid
-brange_buffer <- st_buffer(brange, 10000)
-grid <- st_make_grid(brange_buffer, n = c(20,20))
-uid <- st_intersects(brange_buffer, grid) |> unlist() |> sort()
-uid
-grid <- grid[uid]
+stressor = stars::read_stars("./data/data-raw/halpern_cea-4f84f0e3/halpern_cea-4f84f0e3-2008-inorganic.tif/")
+
+brange_small <- sf::st_transform(brange_small, crs = sf::st_crs(stressor))
+ext <- sf::st_bbox(brange_small)
+stressor <- sf::st_crop(stressor, ext)
+plot(brange_small)
