@@ -6,5 +6,9 @@ ex-data
 raw-data-2008
 raw-data-2013
 .DS_Store
-data/
+data/data-config
+data/data-format
+data/data-grid
+data/data-raw
+
 
