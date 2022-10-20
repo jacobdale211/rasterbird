@@ -6,4 +6,5 @@ ex-data
 raw-data-2008
 raw-data-2013
 .DS_Store
-data/data-raw
+data/
+
