@@ -7,4 +7,6 @@ grid <- sf::st_make_grid(brange_buffer, n = c(20,20))
 uid <- sf::st_intersects(brange_buffer, grid) |> unlist() |> sort()
 uid
 grid <- grid[uid]
-plot(grid)
+
+grid <- stars::st_as_stars(grid)
+stars::write_stars(grid, "./data/data-format/bird-grid.tif/")
