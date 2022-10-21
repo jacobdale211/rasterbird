@@ -1,21 +1,41 @@
 source("./code/functions/check.R")
+on.exit(sf::sf_use_s2(TRUE), add = TRUE)
+sf::sf_use_s2(FALSE)
 
 brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
 path <- "./data/data-format/bird-grid/"
 chk_create(path)
-sp <- brange$species
+
+# Species of interest
+sp <- c(
+  "American Golden-Plover",
+  "Bairds Sandpiper",
+  "Black-bellied Plover",
+  "Buff-breasted Sandpiper",
+  "Cackling Goose",
+  "Glaucous Gull",
+  "King Eider",
+  "Long-tailed Jaeger",
+  "Pacific Loon",
+  "Pectoral Sandpiper",
+  "Red Knot",
+  "Red-throated Loon",
+  "Ruddy Turnstone",
+  "Snow Goose",
+  "Tundra Swan",
+  "White-rumped Sandpiper"
+)
+
+# Select only birds of interest 
+brange <- brange[brange$sp %in% sp, ]
+
+# Vector of species names without names for file export
+nm <- gsub(" ","_", brange$species)
 
 for(i in 1:nrow(brange)) {
-  brange_buffer <- sf::st_buffer(brange[i,], 10000)
-  on.exit(sf::sf_use_s2(TRUE), add = TRUE)
-  sf::sf_use_s2(FALSE)
-  grid <- sf::st_make_grid(brange_buffer, n = c(20,20))
-  uid <- sf::st_intersects(brange_buffer, grid) |> unlist() |> sort()
-  grid <- grid[uid]
-  grid <- stars::st_as_stars(grid)  
-  stars::write_stars(
-    grid, 
-    paste0("./data/data-format/bird-grid/bird-grid_",sp[i],".tif")
-  )
+  print(i)
+  sf::st_buffer(brange[i,], 2) |> # in degrees
+  stars::st_rasterize(dy = .1, dx = .1) |> # use cell-size  
+  stars::write_stars(paste0(path,"bird-grid_",nm[i],".tif"))
 }
 
