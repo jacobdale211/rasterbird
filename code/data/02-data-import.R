@@ -10,12 +10,12 @@ for (i in 1:length(dat_halpern)) {
 }
 
 # #venter
-# path_venter <- dir("./data/data-raw/venter/Dryadv3/Maps/", pattern = ".tif$", full.names = TRUE)
+ path_venter <- dir("./data/data-raw/venter/Dryadv3/Maps/", pattern = ".tif$", full.names = TRUE)
 # 
-# dat_venter <- lapply(path_venter, stars::read_stars, proxy = TRUE)
-# for (i in 1:length(path_venter)) {
-#   dat_venter[[i]] <- stars::read_stars(path_venter[i])
-# }
+ dat_venter <- lapply(path_venter, stars::read_stars, proxy = TRUE)
+ for (i in 1:length(path_venter)) {
+   dat_venter[[i]] <- stars::read_stars(path_venter[i])
+}
 
 stress <- c(dat_halpern, dat_venter)
 

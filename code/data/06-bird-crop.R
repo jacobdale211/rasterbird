@@ -22,7 +22,7 @@ for(i in 1:length(bgrid)) {
       crs = sf::st_crs(stress[[j]])
     )
     sf::st_crop(stress[[j]], grd) |>
-    stars::write_stars(paste0(crpsp,"bird-crop_",spnm[j],"-",names(stress[[j]])))
+    stars::write_stars(paste0(crpsp,"bird-crop_",spnm[i],"-",names(stress[[j]])))
   }
 }
 

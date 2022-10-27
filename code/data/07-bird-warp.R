@@ -28,7 +28,7 @@ for(i in 1:length(bgrid)) {
       bgrid[[i]], 
       crs = sf::st_crs(stress[[j]])
     )
-    sf::st_crop(stress[[j]], grd) |>
+    sf::st_warp(stress[[j]], grd) |>
     sf::st_transform(crs = 4326) |>
     stars::write_stars(
       paste0(
