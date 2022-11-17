@@ -13,13 +13,16 @@ spnm <- gsub("bird-grid_", "", spnm)
 spnm <- gsub(".tif", "", spnm) 
 
 # Loop to crop each stressor over each species range
-for(i in 2:length(bgrid)) {
+for(i in 1:length(bgrid)) {
   # This is messy 
   wrpsp <- paste0(wrp,spnm[i],"/")
   crpsp <- paste0(crp,spnm[i],"/")
   chk_create(wrpsp)
   stress <- dir(crpsp, pattern = ".tif$", full.names = TRUE) |>
             lapply(stars::read_stars)
+  nmst <- unlist(lapply(stress, function(x) tools::file_path_sans_ext(names(x))))
+  names(stress) <- nmst
+            
             
   # Iterate over stressors
   for(j in 1:34) {
@@ -32,8 +35,9 @@ for(i in 2:length(bgrid)) {
     sf::st_transform(crs = 4326) |>
     stars::write_stars(
       paste0(
-        wrpsp,
-        gsub("bird-crop_","bird-warp_",spnm[i],names(stress[[j]]))
+        wrpsp, 
+        gsub("bird-crop_","bird-warp_",nmst[j]), 
+        ".tif"
       )
     )
   }
