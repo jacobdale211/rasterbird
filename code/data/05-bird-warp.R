@@ -27,12 +27,7 @@ for(i in 1:length(bgrid)) {
   # Iterate over stressors
   for(j in 1:34) {
     print(paste0("bird: ", i,"; stressor: ", j))  
-    grd <- sf::st_transform(
-      bgrid[[i]], 
-      crs = sf::st_crs(stress[[j]])
-    )
     stars::st_warp(stress[[j]], grd) |>
-    sf::st_transform(crs = 4326) |>
     stars::write_stars(
       paste0(
         wrpsp, 
