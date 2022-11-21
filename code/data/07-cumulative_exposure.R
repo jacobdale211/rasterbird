@@ -36,9 +36,14 @@ for(i in 1:length(birdfolders)) {
   cumul <- do.call("c", dat) |>
            st_redimension() |>
            st_apply(c(1,2), sum, na.rm = TRUE)
+<<<<<<< HEAD
   # Export
   png(file = glue::glue("figures/cumulative/{input}.png"))
  image(cumul, col = viridis::viridis(100))
   dev.off()
+=======
+  # plot(cumul, breaks = "equal")
+  image(cumul, col = viridis::viridis(100))
+>>>>>>> e54e0d3c3f2822c5d348972685520437c17c4f79
 }
   

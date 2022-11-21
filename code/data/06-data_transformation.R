@@ -34,6 +34,7 @@ for(i in 1:length(stressor_names)) {
   for(j in 1:length(stress)) stress[[j]] <- log(stress[[j]] + 1)
   
   # Evaluate 99th percentile for stressor i across all birds
+<<<<<<< HEAD
   # vals <- list()
   # for (j in 1:length(stress)) {
   #   r <- as.data.frame(stress[[j]]) 
@@ -49,6 +50,16 @@ for(i in 1:length(stressor_names)) {
     md <- max(stress[[j]][[1]], na.rm = TRUE)
     stress[[j]] <- stress[[j]]/md
   }
+=======
+  max_vals <- numeric(length(stress))
+  for (j in 1:length(stress)) {
+    max_vals[j] <- max(stress[[j]][[1]], na.rm = TRUE)
+  }
+  maxVal <- max(max_vals)
+  
+  # Standardize individual bird rasters based on 99th percentile of stressor i across all birds
+  for(j in 1:length(stress)) stress[[j]] <- stress[[j]] / maxVal
+>>>>>>> e54e0d3c3f2822c5d348972685520437c17c4f79
   
   # Export 
   newfiles <- gsub("bird-warp","bird-transformed", files)
