@@ -14,6 +14,6 @@ for(i in 1:length(birdfolders)) {
   cumul <- do.call("c", dat) |>
            st_redimension() |>
            st_apply(c(1,2), sum, na.rm = TRUE)
-  plot(cumul, breaks = "equal")
+  # plot(cumul, breaks = "equal")
   image(cumul, col = viridis::viridis(100))
 }
