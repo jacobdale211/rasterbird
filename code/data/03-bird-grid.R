@@ -40,3 +40,4 @@ for(i in 1:nrow(brange)) {
   stars::write_stars(paste0(path,"bird-grid_",nm[i],".tif"))
 }
 
+

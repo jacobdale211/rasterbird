@@ -13,7 +13,7 @@ spnm <- gsub("bird-grid_", "", spnm)
 spnm <- gsub(".tif", "", spnm) 
 
 # Loop to crop each stressor over each species range
-for(i in 1:length(bgrid)) {
+for(i in 10:length(bgrid)) {
   # This is messy 
   wrpsp <- paste0(wrp,spnm[i],"/")
   crpsp <- paste0(crp,spnm[i],"/")

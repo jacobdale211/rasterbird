@@ -1,3 +1,4 @@
+
 library(stars)
 filespaths <- dir(
   "data/data-format/bird-warp", 
@@ -11,20 +12,26 @@ folders <- dir("data/data-format/bird-warp")
 
 for(i in 1:length(folders)) dir.create(paste0(output, folders[i]), recursive = TRUE)
 
+# Eventually, add to separate config file
 stressor_names <- c(
   "Built1994", "Built2009", "croplands1992", "croplands2005", "2008-inorganic", 
   "2013-inorganic", "2008-invasives", "2013-invasives","2008-night_lights", 
   "2008-ocean_pollution", "2008-plumes_fert", "2008-plumes_pest","2008-population", 
   "2008-shipping", "2013-night_lights", "2013-ocean_pollution", "2013-plumes_fert",
-  "2013-plumes_pest", "2013-population", "2013-shipping", "HFP1993_int", "HFP1993.tif", 
-  "HFP2009_int", "HFP2009.tif", "Lights1994", "Lights2009", "NavWater1994", "NavWater2009",
-  "Pasture1993", "Pasture2009", "Popdensity1990", "Popdensity2010", "Railways", "Roads"
+  "2013-plumes_pest", "2013-population", "2013-shipping", "Lights1994", "Lights2009",
+  "NavWater1994", "NavWater2009", "Pasture1993", "Pasture2009", "Popdensity1990", 
+  "Popdensity2010", "Railways", "Roads"
 )
 
+# Selecting most updated stressors
+stressor_names_new <- c(
+ "Built2009", "croplands2005", "2013-inorganic", "2013-invasives","2013-night_lights", "2013-ocean_pollution", "2013-plumes_fert",
+ "2013-plumes_pest", "2013-population", "2013-shipping","Lights2009","NavWater2009","Pasture2009","Popdensity2010", "Railways", "Roads")
+
 dat <- list()
-for(i in 1:length(stressor_names)) {
+for(i in 1:length(stressor_names_new)) {
   # Get filepaths for stressor i
-  uid <- stringr::str_detect(filespaths, stressor_names[i]) 
+  uid <- stringr::str_detect(filespaths, stressor_names_new[i]) 
   files <- filespaths[uid] 
   
   # Load tif files for stressor i
@@ -34,23 +41,7 @@ for(i in 1:length(stressor_names)) {
   for(j in 1:length(stress)) stress[[j]] <- log(stress[[j]] + 1)
   
   # Evaluate 99th percentile for stressor i across all birds
-<<<<<<< HEAD
-  # vals <- list()
-  # for (j in 1:length(stress)) {
-  #   r <- as.data.frame(stress[[j]]) 
-  #   vals[[j]] <- r[,3] 
-  # }
-  # quantile99 <- unlist(vals) |> quantile(probs = .99, na.rm = T) 
-  # 
-  # # Standardize individual bird rasters based on 99th percentile of stressor i across all birds
-  # for(j in 1:length(stress)) stress[[j]] <- stress[[j]] / quantile99
-  
-  # Standardize 
-  for(j in 1:length(stress)) {
-    md <- max(stress[[j]][[1]], na.rm = TRUE)
-    stress[[j]] <- stress[[j]]/md
-  }
-=======
+
   max_vals <- numeric(length(stress))
   for (j in 1:length(stress)) {
     max_vals[j] <- max(stress[[j]][[1]], na.rm = TRUE)
@@ -59,8 +50,7 @@ for(i in 1:length(stressor_names)) {
   
   # Standardize individual bird rasters based on 99th percentile of stressor i across all birds
   for(j in 1:length(stress)) stress[[j]] <- stress[[j]] / maxVal
->>>>>>> e54e0d3c3f2822c5d348972685520437c17c4f79
-  
+
   # Export 
   newfiles <- gsub("bird-warp","bird-transformed", files)
   for(j in 1:length(stress)) {
@@ -70,6 +60,4 @@ for(i in 1:length(stressor_names)) {
     )
   }
 }
-
-
 
