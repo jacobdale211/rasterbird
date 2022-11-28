@@ -25,9 +25,9 @@ rdat <- range(alldat, na.rm = TRUE)
 par(mar = c(12,2,2,2))
 plot(means[uid], xlim = c(0, length(m)), ylim = c(0, rdat[2]), pch = 21, col = "#88c3b5", bg = "#66281b", xlab = "", xaxt = "n")
 for(i in 1:length(m)) {
-  points(x = rep(i, length(m[[uid[i]]])), y = m[[uid[i]]], cex = .1, col = "#00000033")
-  mtext(brange$species[i], side = 1, at = uid[i], las = 2, line = 1)
+  # points(x = rep(i, length(m[[uid[i]]])), y = m[[uid[i]]], cex = .1, col = "#00000033")
 }
+mtext(species[uid], side = 1, at = uid, las = 2, line = 1)
 points(x = seq(1, length(m)), y = means[uid], pch = 21, col = "#88c3b5", bg = "#66281b", cex = 2)
 
 
