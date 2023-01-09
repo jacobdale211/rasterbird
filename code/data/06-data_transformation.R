@@ -29,9 +29,9 @@ stressor_names_new <- c(
  "2013-plumes_pest", "2013-population", "2013-shipping","Lights2009","NavWater2009","Pasture2009","Popdensity2010", "Railways", "Roads")
 
 dat <- list()
-for(i in 1:length(stressor_names_new)) {
+for(i in 1:length(stressor_names)) {
   # Get filepaths for stressor i
-  uid <- stringr::str_detect(filespaths, stressor_names_new[i]) 
+  uid <- stringr::str_detect(filespaths, stressor_names[i]) 
   files <- filespaths[uid] 
   
   # Load tif files for stressor i

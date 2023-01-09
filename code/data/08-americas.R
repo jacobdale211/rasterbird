@@ -122,5 +122,6 @@ brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breed
   par(mar = c(0,0,0,0))
   image(dat, col = viridis::viridis(100))
   plot(sf::st_geometry(brange[18,]), add = TRUE, border = "#A1B866", lwd = 2)
-  plot(sf::st_geometry(brange[25,]), add = TRUE, border = "#5981B8", lwd = 2)
+  plot(sf::st_geometry(brange[25,]), add = TRUE, border = "#F6C143", lwd = 2)
   dev.off()
+  

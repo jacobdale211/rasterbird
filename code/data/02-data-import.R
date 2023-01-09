@@ -10,6 +10,8 @@ path_venter <- dir(
   pattern = ".tif$", 
   full.names = TRUE
 )
+# insert code for selecting specific stressors from Venter
+
 dat_venter <- lapply(path_venter, stars::read_stars, proxy = TRUE)
 nm <- lapply(dat_venter, function(x) tools::file_path_sans_ext(names(x)))
 names(dat_venter) <- nm
