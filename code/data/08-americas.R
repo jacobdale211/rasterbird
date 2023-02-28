@@ -125,3 +125,5 @@ brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breed
   plot(sf::st_geometry(brange[25,]), add = TRUE, border = "#F6C143", lwd = 2)
   dev.off()
   
+  plot(cumul)
+  

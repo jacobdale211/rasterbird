@@ -1,6 +1,8 @@
 source("./code/functions/check.R")
 plt <-"figures/cumulative/"
+tif <-"output/cumulative"
 chk_create(plt)
+chk_create(tif)
 
 str <- "figures/stressors/"
 chk_create(str)
@@ -20,7 +22,7 @@ spnm <- gsub("bird-grid_", "", spnm)
 spnm <- gsub(".tif", "", spnm) 
 
 library(stars)
-birdfolders <- dir("data/data-format/bird-transformed", full.names = TRUE)
+birdfolders <- dir("data/data-format/bird-vulnerability", full.names = TRUE)
 
 # Red knot is i=9, snow goose is i=11
 
@@ -38,13 +40,19 @@ for(i in 1:length(birdfolders)) {
   cumul <- do.call("c", dat) |>
            st_redimension() |>
            st_apply(c(1,2), sum, na.rm = TRUE)
-
+  
+  # Export tif file
+  stars::write_stars(cumul, glue::glue("output/cumulative/{input}.tif"))
   # Export
   par(mfrow = c(1,1))
   png(file = glue::glue("figures/cumulative/{input}.png"))
   image(cumul, col = viridis::viridis(100), main = "")
   dev.off()
 }
+
+# New folder - export each iteration of cumulative effect
+# one tif file per species
+
 
 
 # # Outside of workflow - to be changed in the future!
