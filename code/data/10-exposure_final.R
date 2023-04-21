@@ -44,7 +44,7 @@ plot(x = dat$exposure_mean, y = dat$perc)
 
 plot(x = dat$exposure_mean[-c(10,4)], y = dat$perc[-c(10,4)])
 
-pch = 21, col = "#88c3b5", bg = "#66281b", xlab = "", xaxt = "n")
+# pch = 21, col = "#88c3b5", bg = "#66281b", xlab = "", xaxt = "n")
 for(i in 1:length(m)) {
   # points(x = rep(i, length(m[[uid[i]]])), y = m[[uid[i]]], cex = .1, col = "#00000033")
 }
