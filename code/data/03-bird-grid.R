@@ -13,11 +13,9 @@ sp <- c(
   "Black-bellied Plover",
   "Buff-breasted Sandpiper",
   "Cackling Goose",
-  "Common-ringed Plover",
   "Glaucous Gull",
   "King Eider",
   "Long-tailed Duck",
-  "Pacific Loon",
   "Pectoral Sandpiper",
   "Red Knot",
   "Red-throated Loon",
@@ -26,6 +24,15 @@ sp <- c(
   "Tundra Swan",
   "White-rumped Sandpiper"
 )
+
+# Removed
+"Common-ringed Plover"
+
+# Temp removal, no trend data
+"Long-tailed Jaeger"
+"Pacific Loon"
+"Parasitic Jaeger"
+
 
 # Select only birds of interest 
 brange <- brange[brange$sp %in% sp, ]

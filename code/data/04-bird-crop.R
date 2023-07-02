@@ -25,5 +25,4 @@ for(i in 1:length(bgrid)) {
     stars::write_stars(paste0(crpsp,"bird-crop_",spnm[i],"-",names(stress[[j]])))
   }
 }
-
 #x <- raster::raster("/Users/jacobdale/tryitout/rasterbird/data/data-format/bird-warp/American_Golden-Plover/bird-warp_American_Golden-Plover-halpern_cea-4f84f0e3-2008-invasives.tif")

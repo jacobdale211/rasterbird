@@ -2,9 +2,14 @@ filespaths <- dir("/Users/jacobdale/tryitout/rasterbird/data/data-format/bird-wa
 stressor_names <- c("Built1994", "Built2009", "croplands1992", "croplands2005", "2008-inorganic", "2013-inorganic",
                     "2008-invasives", "2013-invasives","2008-night_lights", "2008-ocean_pollution", "2008-plumes_fert",
                     "2008-plumes_pest","2008-population", "2008-shipping", "2013-night_lights", "2013-ocean_pollution",
-                    "2013-plumes_fert","2013-plumes_pest", "2013-population", "2013-shipping", "HFP1993_int", "HFP1993.tif", 
-                    "HFP2009_int", "HFP2009.tif", "Lights1994", "Lights2009", "NavWater1994", "NavWater2009", "Pasture1993", 
+                    "2013-plumes_fert","2013-plumes_pest", "2013-population", "2013-shipping", "HFP1993.tif", 
+                     "HFP2009.tif", "Lights1994", "Lights2009", "NavWater1994", "NavWater2009", "Pasture1993", 
                     "Pasture2009", "Popdensity1990", "Popdensity2010", "Railways", "Roads")
+
+# Removed from stressors:
+# "HFP1993_int"
+# "HFP2009_int"
+
 datlog <- function(x) {
   log(x+1)
 }

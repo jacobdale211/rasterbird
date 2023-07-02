@@ -19,3 +19,4 @@ stress <- c(dat_halpern, dat_venter)
 
 #Loads data but loads ALL .tif files, not selected ones - do I add the object with
 # the list of selected .tif names to the lapply function?
+
