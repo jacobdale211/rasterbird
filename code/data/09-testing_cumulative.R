@@ -1,16 +1,29 @@
 on.exit(sf::sf_use_s2(TRUE), add = TRUE)
 sf::sf_use_s2(FALSE)
 
-cumul <- stars::read_stars("output/data-stressors/terrestrial_human_footprint_venter-103a233e-croplands2005.tif")
-v <- read.csv("data/data-format/v-matrix.csv")
+# FOR SINGLE DRIVERS AT A TIME
+cumul <- stars::read_stars("data/data-cumulative_stressors/cumulative_stressors.tif")
+
+# v <- read.csv("data/data-format/v-matrix.csv")
+
+# Loads all stressors 
 # cumul <- dir("output/data-stressors", full.names = TRUE) |>
   # lapply(stars::read_stars)
 
 brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
 species <- brange$species
-
 pop <- read.csv("data/data-raw/birdlife/birdlife-trends.csv")
+pop <-pop[c("species", "percent_change","category")]
 
+# New population trends for shorebirds
+new <- read.csv("All_Shorebird_migration_survey_wide_trends.csv")
+sbirds <- new[new$trend_type == "Long-term",]
+sbirds$category <- "shorebird"
+
+# Filter & join
+filter <- sbirds[sbirds$species %in% species, ]
+final <- filter[c("species", "percent_change","category")] 
+r <- rbind(final, pop)
 
 l <- list()
 for(i in 1:nrow(brange)) {
@@ -37,31 +50,34 @@ dat <- data.frame(
 # Joining exposure and Rosenberg data
 alldat <- dplyr::left_join(
   dat, 
-  pop[,c("species","perc","Loss_med")], 
+  r[,c("species","percent_change","category")], 
   by = c("bird" = "species")
 ) |>
   na.omit()
 
-v[,5] <- as.numeric(v[,5])
-alldat$exposure_mean <- as.numeric(alldat$exposure_mean)
-new <- (v[,5] * alldat$exposure_mean)
+# Rework exposure mean with vulnerability matrix (tabled til vulnerability rework)
+# v[,5] <- as.numeric(v[,5])
+# alldat$exposure_mean <- as.numeric(alldat$exposure_mean)
+# new <- (v[,5] * alldat$exposure_mean)
+# new <- as.numeric(new)
+
+# Fixes y axis - (change this to as.character to make graph clear, as.numeric to make y axis accurate)
+alldat$perc <- as.numeric(alldat$perc)
 
 # rdat <- range(alldat, na.rm = TRUE)
 par(mar = c(20,20,20,20))
 
 birds <- alldat$bird
-ggplot(data = alldat, aes(x = alldat$exposure_mean, y = alldat$perc)) +
-  geom_point() +
-  geom_text(aes(label = birds), vjust = -0.5) +
-  labs(x = "Exposure Mean", y = "% Population Change (in 100's)", title = "Exposure mean vs. population trends of Cropland Expansion")
+ggplot2::ggplot(data = alldat, ggplot2::aes(x = alldat$exposure_mean, y = alldat$perc, color = category)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_text(ggplot2::aes(label = birds), vjust = -0.5) +
+  ggplot2::labs(x = "Exposure Mean", y = "% Population Change (in 100's)", title = "Exposure mean vs. population trends of Crop Distribution")
 
+# GLM
 
-plot(x = alldat$exposure_mean, y = alldat$perc)
-#pch = 21, col = "#88c3b5", bg = "#66281b", xlab = "", xaxt = "n")
-for(i in 1:length(m)) {
- # points(x = rep(i, length(m[[uid[i]]])), y = m[[uid[i]]], cex = .1, col = "#00000033")
-}
-mtext(species[uid], side = 1, at = uid, las = 2, line = 1)
-points(x = seq(1, length(m)), y = means[uid], pch = 21, col = "#88c3b5", bg = "#66281b", cex = 2)
+model <- glm(alldat$perc ~ alldat$exposure_mean * alldat$category)
+model
+par(mar = c(2, 2, 2, 2))
+plot(model)
+summary(model)
 
-means

@@ -1,10 +1,16 @@
 source("./code/functions/check.R")
-source("./code/data/02-data-import.R")
+
+# Temp disabled using new source
+# source("./code/data/02-data-import.R")
 ras <- "./data/data-format/bird-grid/"
 crp <- "./data/data-format/bird-crop/"
 chk_create(crp)
 files <- dir(ras, pattern = ".tif$", full.names = TRUE)
 bgrid <- lapply(files, stars::read_stars)
+
+stressdir <- "./data/data-stressors/"
+files2 <- dir(stressdir, pattern = ".tif$", full.names = TRUE)
+stress <- lapply(files2, stars::read_stars)
 
 # Get bird names
 spnm <- lapply(bgrid, names)
