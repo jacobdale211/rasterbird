@@ -2,7 +2,7 @@ on.exit(sf::sf_use_s2(TRUE), add = TRUE)
 sf::sf_use_s2(FALSE)
 
 # FOR SINGLE DRIVERS AT A TIME
-cumul <- stars::read_stars("data/data-cumulative_stressors/cumulative_stressors.tif")
+cumul <- stars::read_stars("data/data-stressors/terrestrial_human_footprint_venter-103a233e-croplands2005.tif")
 
 # v <- read.csv("data/data-format/v-matrix.csv")
 
@@ -75,9 +75,51 @@ ggplot2::ggplot(data = alldat, ggplot2::aes(x = alldat$exposure_mean, y = alldat
 
 # GLM
 
-model <- glm(alldat$perc ~ alldat$exposure_mean * alldat$category)
-model
 par(mar = c(2, 2, 2, 2))
-plot(model)
-summary(model)
 
+model <- glm(perc ~ exposure_mean * category, data = alldat, family = "poisson")
+model
+summary(model)
+report::report(model)
+plot(model)
+
+pscl::pR2(model)['McFadden']
+
+# ANOVA 
+
+model2 <- aov(perc ~ category, data = alldat)
+summary(model2)
+
+report::report(model2)
+
+# LM with random effects
+
+model3 <- lme4::lmer(perc ~ exposure_mean * (1|category), data = alldat)
+
+model3
+summary(model3)
+report::report(model3)
+plot(model3)
+abline(model3)
+
+#  LM
+model4 <- lm(perc ~ exposure_mean * category, data = alldat)
+model4
+summary(model4)
+report::report(model4)
+plot(model4)
+abline(model4)
+
+# Bayesian
+model5 <- brms::brm(perc ~ exposure_mean * category, data = alldat)
+plot(model5)
+report::report(model5)
+
+# ANOVA
+model6 <- aov(perc ~ exposure_mean * category, data = alldat)
+plot(model6)
+report::report(model6)
+summary(model6)
+# 
+# q <- stars::read_stars("data/data-format/bird-transformed/King_Eider/bird-transformed_King_Eider-terrestrial_human_footprint_venter-103a233e-Pasture2009.tif")
+# image(q)

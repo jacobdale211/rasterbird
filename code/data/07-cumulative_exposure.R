@@ -22,7 +22,7 @@ spnm <- gsub("bird-grid_", "", spnm)
 spnm <- gsub(".tif", "", spnm) 
 
 library(stars)
-birdfolders <- dir("data/data-format/bird-vulnerability", full.names = TRUE)
+birdfolders <- dir("data/data-format/bird-transformed", full.names = TRUE)
 
 # Red knot is i=9, snow goose is i=11
 
@@ -55,30 +55,5 @@ for(i in 1:length(birdfolders)) {
 
 
 
-# # Outside of workflow - to be changed in the future!
-# 
-# # Modify red knot range
-# test <- stars::read_stars("data/data-format/bird-grid/bird-grid_Red_Knot.tif")
-# # Create bounding box
-# bbox <- c(
-#   xmin = -120, ymin = -60, 
-#   xmax = -30, ymax = 60
-# ) |>
-#   sf::st_bbox(crs = sf::st_crs(4326)) |>
-#   sf::st_as_sfc()
-# 
-# # Proper Red Knot range
-# cumul_crop <- cumul[bbox, ]
-# plot(cumul_crop)
-# 
-# polygon_1 <- snowgoose[bbox, ]
-# polygon_1
-# # Getting average exposure
-# brange <- sf::st_read("data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
-# redknot <- brange[18,1]
-# cumul_new<- cumul_crop[redknot]
-# 
-# snowgoose <-brange[25,1]
-# snowgoose <- stars::read_stars("data/data-format/bird-grid/bird-grid_Snow_Goose.tif")
-# cumul_new <-cumul[snowgoose]
+
 
