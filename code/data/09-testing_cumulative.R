@@ -70,8 +70,8 @@ par(mar = c(20,20,20,20))
 birds <- alldat$bird
 ggplot2::ggplot(data = alldat, ggplot2::aes(x = alldat$exposure_mean, y = alldat$perc, color = category)) +
   ggplot2::geom_point() +
-  ggplot2::geom_text(ggplot2::aes(label = birds), vjust = -0.5) +
-  ggplot2::labs(x = "Exposure Mean", y = "% Population Change (in 100's)", title = "Exposure mean vs. population trends of Crop Distribution")
+  # ggplot2::geom_text(ggplot2::aes(label = birds), vjust = -0.5) +
+  ggplot2::labs(x = "Exposure Mean", y = "% Population Change (in 100's)", title = "Exposure mean of crop distribution vs. population trends")
 
 # GLM
 
@@ -120,6 +120,49 @@ model6 <- aov(perc ~ exposure_mean * category, data = alldat)
 plot(model6)
 report::report(model6)
 summary(model6)
+summary.aov(model6)
+
+
+
 # 
 # q <- stars::read_stars("data/data-format/bird-transformed/King_Eider/bird-transformed_King_Eider-terrestrial_human_footprint_venter-103a233e-Pasture2009.tif")
 # image(q)
+
+
+
+# Rework data to get rid of negative values...
+new_perc <- alldat[, 6] + 95
+new_perc <- as.data.frame(new_perc)
+alldat <- cbind(alldat, new_perc)
+
+# ANOVA without "category"
+model7 <- aov(perc ~ exposure_mean, data = alldat)
+plot(model7)
+report::report(model7)
+summary(model7)
+summary.aov(model7)
+
+# Kruskal for ANOVA, without "category"
+kruskal.test(perc ~ exposure_mean, data = alldat)
+
+# GLM with transformed data
+
+par(mar = c(2, 2, 2, 2))
+
+model8 <- glm(new_perc ~ exposure_mean * category, data = alldat, family = "poisson")
+model8
+summary(model8)
+report::report(model8)
+plot(model8)
+
+pscl::pR2(model8)['McFadden']
+
+# Bayesian GLM with GLMM (transformed data)
+model9 <- MCMCglmm::MCMCglmm(new_perc ~ exposure_mean * category, data = alldat)
+plot(model9)
+summary(model9)
+
+# Bayesian GLM with GLMM (non-transformed data; priors not yet applied)
+model10 <- MCMCglmm::MCMCglmm(perc ~ exposure_mean * category, data = alldat)
+plot(model10)
+summary(model10)
