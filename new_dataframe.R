@@ -32,6 +32,9 @@ p <- p[-9]
 amgplo_u <- sf::st_union(p[[1]])
 amgplo_d <- sf::st_cast(amgplo_u, "POLYGON")
 
+centroid <- sf::st_centroid(amgplo_d)
+centroid
+
 # 2, Black-bellied_Plover
 blbplo_u <- sf::st_union(p[[2]])
 blbplo_d <- sf::st_cast(blbplo_u, "POLYGON")
@@ -44,6 +47,8 @@ bubsan_d <- sf::st_cast(bubsan_u, "POLYGON")
 cacgoo_u <- sf::st_union(p[[4]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
 
+centroid_cg <- sf::st_centroid(cacgoo_d)
+centroid_cg
 
 # 5, Glaucous Gull, 1 range
 glagul_u <- sf::st_union(p[[6]])
@@ -105,9 +110,9 @@ list_birds <- c(amgplo_d, blbplo_d, bubsan_d, cacgoo_d, glagul_d, kineid_d, lotd
                 pecsan_d, redkno_d, retloo_d, rudtur_d, snogoo_d, tunswa_d, whrsan_d)
 
 list_num_birds <- c(1, 4, 1, 2, 3, 3, 9, 13, 6, 2, 2, 1, 1, 2, 1, 3)
-list_name_birds <- c("American Golden-Plover", "Black-bellied_Plover", "Buff-breasted Sandpiper", "Cackling Goose", "Glaucous Gull",
-                     "King Eider", "Long-tailed Duck", "Long-tailed Jaeger", "Parasitic Jaeger", "Pectoral Sandpiper", "Red Knot",
-                     "Red-throated Loon", "Ruddy Turnstone", "Snow Goose", "Tundra Swan", "White-rumped Sandpiper")
+list_name_birds <- c("American_Golden-Plover", "Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose", "Glaucous_Gull",
+                     "King_Eider", "Long-tailed_Duck", "Long-tailed_Jaeger", "Parasitic_Jaeger", "Pectoral_Sandpiper", "Red_Knot",
+                     "Red-throated_Loon", "Ruddy_Turnstone", "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
 list_name_drivers <- c(
   "inorganic",
   "invasives",
@@ -179,6 +184,8 @@ write.csv(final_df, file = "final_df.csv", row.names = FALSE)
 # Read in csv
 reformatted_data <- read.csv("final_df.csv")
 
+reformatted_data$max <- as.numeric(reformatted_data$max)
+
 # Check distributions
 hist(reformatted_data$mean) 
 hist(reformatted_data$max)
@@ -199,11 +206,44 @@ hist(final_df_filtered$percent)
 # Still lots of negatives!
 
 
+# Reworking data frame to assign binomial values to trends
+# (positve & non-increasing vs decreasing)
+final_df_filtered$perc_binomial <- ifelse(final_df_filtered$percent >= 0, 1, 0)
+
+
+# Reformat species names to get rid of spaces to split first column
+# NOTE: spaces have been removed in list_name_birds() object; no need to run this step if the dataframe
+# is reproduced
+final_df_filtered$species <- gsub("American Golden-Plover", "American_Golden-Plover", final_df_filtered$species)
+final_df_filtered$species <- gsub("Buff-breasted Sandpiper", "Buff-breasted_Sandpiper", final_df_filtered$species)
+final_df_filtered$species <- gsub("Cackling Goose", "Cackling_Goose", final_df_filtered$species)
+final_df_filtered$species <- gsub("Glaucous Gull", "Glaucous_Gull", final_df_filtered$species)
+final_df_filtered$species <- gsub("King Eider", "King_Eider", final_df_filtered$species)
+final_df_filtered$species <- gsub("Long-tailed Duck", "Long-tailed_Duck", final_df_filtered$species)
+final_df_filtered$species <- gsub("Long-tailed Jaeger", "Long-tailed_Jaeger", final_df_filtered$species)
+final_df_filtered$species <- gsub("Parasitic Jaeger", "Parasitic_Jaeger", final_df_filtered$species)
+final_df_filtered$species <- gsub("Pectoral Sandpiper", "Pectoral_Sandpiper", final_df_filtered$species)
+final_df_filtered$species <- gsub("Red Knot", "Red_Knot", final_df_filtered$species)
+final_df_filtered$species <- gsub("Red-throated Loon", "Red-throated_Loon", final_df_filtered$species)
+final_df_filtered$species <- gsub("Ruddy Turnstone", "Ruddy_Turnstone", final_df_filtered$species)
+final_df_filtered$species <- gsub("Snow Goose", "Snow_Goose", final_df_filtered$species)
+final_df_filtered$species <- gsub("Tundra Swan", "Tundra_Swan", final_df_filtered$species)
+final_df_filtered$species <- gsub("White-rumped Sandpiper", "White-rumped_Sandpiper", final_df_filtered$species)
+
+# Split first column into 3 (species, range number, stressor)
+final_df_filtered <- separate(final_df_filtered, species, into = c("sp", "range", "stressor"), sep = " ")
+
+
 
 # Let's try a model
-
-model <- glm(percent ~ mean * category, data = final_df_filtered, family = "poisson")
+model <- glm(ifelse_percent ~ mean * category, data = final_df_filtered, family = "binomial")
 summary(model)
+
+probabilities <- model %>% predict(final_df_filtered, type = "response")
+probabilities
+
+predicted.classes <- ifelse(probabilities > 0.5, "pos", "neg")
+mean(predicted.classes == final_df_filtered$ifelse_percent)
 
 # Binomial and quasibinomial ... "Error in eval(family$initialize) : y values must be 0 <= y <= 1"
 # which makes sense... so should we use gaussian instead?
@@ -217,3 +257,16 @@ summary(model)
 
 
 
+# "Reworking" of population trends, adding a constant value so all values are above 0
+# and a Poisson could be possible
+new_perc <- final_df_filtered[, 6] + 95
+new_perc <- as.data.frame(new_perc)
+final_df_filtered <- cbind(final_df_filtered, new_perc)
+
+# ANOVA (?)
+# Estimates how a quantitative dependent variable changes 
+# according to the levels of one or more categorical independent variables.
+
+model_a <- aov(new_perc ~ mean * category, data = final_df_filtered)
+plot(model_a)
+summary(model_a)
