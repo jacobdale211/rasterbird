@@ -39,68 +39,114 @@ centroid
 blbplo_u <- sf::st_union(p[[2]])
 blbplo_d <- sf::st_cast(blbplo_u, "POLYGON")
 
+centroid <- sf::st_centroid(blbplo_d[[4]])
+centroid
+
 # 3, Buff-breasted Sandpiper, 1 range
 bubsan_u <- sf::st_union(p[[3]])
 bubsan_d <- sf::st_cast(bubsan_u, "POLYGON")
+
+centroid <- sf::st_centroid(bubsan_d)
+centroid
 
 # 4, Cackling Goose
 cacgoo_u <- sf::st_union(p[[4]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
 
-centroid_cg <- sf::st_centroid(cacgoo_d)
-centroid_cg
+centroid <- sf::st_centroid(cacgoo_d[[1]])
+centroid
 
-# 5, Glaucous Gull, 1 range
-glagul_u <- sf::st_union(p[[6]])
+# 5, Glaucous Gull
+glagul_u <- sf::st_union(p[[5]])
 glagul_d <- sf::st_cast(glagul_u, "POLYGON")
+
+centroid <- sf::st_centroid(glagul_d)
+centroid
 
 # 6, King Eider
 kineid_u <- sf::st_union(p[[6]])
 kineid_d <- sf::st_cast(kineid_u, "POLYGON")
 
+centroid <- sf::st_centroid(kineid_d)
+centroid
+
 # 7, Long-tailed Duck
 lotduc_u <- sf::st_union(p[[7]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
+
+centroid <- sf::st_centroid(lotduc_d[[9]])
+centroid
 
 # 8, Long-tailed Jaeger
 lotjae_u <- sf::st_union(p[[8]])
 lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
 
+centroid <- sf::st_centroid(lotjae_d[[13]])
+centroid
+
 # 9, Parasitic Jaeger
 parjae_u <- sf::st_union(p[[9]])
 parjae_d <- sf::st_cast(parjae_u, "POLYGON")
+
+centroid <- sf::st_centroid(parjae_d[[6]])
+centroid
 
 # 10, Pectoral Sandpiper
 pecsan_u <- sf::st_union(p[[10]])
 pecsan_d <- sf::st_cast(pecsan_u, "POLYGON")
 
+centroid <- sf::st_centroid(pecsan_d)
+centroid
+
 # 11, Red Knot * need to remove EU and Africa populations
 redkno_u <- sf::st_union(p[[11]])
 redkno_d <- sf::st_cast(redkno_u, "POLYGON")
+
+centroid <- sf::st_centroid(redkno_d)
+centroid
+
+# Removing EU and Africa polygons
+redkno_d <- redkno_d[-3] # Run 3 times
 
 # 12, Red-throated Loon, 1 range
 retloo_u <- sf::st_union(p[[12]])
 retloo_d <- sf::st_cast(retloo_u, "POLYGON")
 
+centroid <- sf::st_centroid(retloo_d)
+centroid
+
 # 13, Ruddy Turnstone * need to remove EU and Africa populations
 rudtur_u <- sf::st_union(p[[13]])
 rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
+
+centroid <- sf::st_centroid(rudtur_d)
+centroid
+
+# Removing EU and Africa polygons
+rudtur_d <- rudtur_d[-2] # Run 5 times
 
 # 14, Snow Goose
 snogoo_u <- sf::st_union(p[[14]])
 snogoo_d <- sf::st_cast(snogoo_u, "POLYGON")
 
+centroid <- sf::st_centroid(snogoo_d)
+centroid
+
 # 15, Tundra Swan, 1 range
 tunswa_u <- sf::st_union(p[[15]])
 tunswa_d <- sf::st_cast(tunswa_u, "POLYGON")
+
+centroid <- sf::st_centroid(tunswa_d)
+centroid
 
 # 16, White-rumped Sandpiper
 whrsan_u <- sf::st_union(p[[16]])
 whrsan_d <- sf::st_cast(whrsan_u, "POLYGON")
 
-# Removing EU and Africa polygons
-redkno_d <- redkno_d[-3] # Run 3 times
-rudtur_d <- rudtur_d[-2] # Run 5 times
+centroid <- sf::st_centroid(whrsan_d)
+centroid
+
+
 
 # Extract values from rasters
 drivers <- dir("data/data-stressors", full.names = TRUE) |>
@@ -109,7 +155,7 @@ drivers <- dir("data/data-stressors", full.names = TRUE) |>
 list_birds <- c(amgplo_d, blbplo_d, bubsan_d, cacgoo_d, glagul_d, kineid_d, lotduc_d, lotjae_d, parjae_d,
                 pecsan_d, redkno_d, retloo_d, rudtur_d, snogoo_d, tunswa_d, whrsan_d)
 
-list_num_birds <- c(1, 4, 1, 2, 3, 3, 9, 13, 6, 2, 2, 1, 1, 2, 1, 3)
+list_num_birds <- c(1, 4, 1, 2, 1, 3, 9, 13, 6, 2, 2, 1, 1, 2, 1, 3)
 list_name_birds <- c("American_Golden-Plover", "Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose", "Glaucous_Gull",
                      "King_Eider", "Long-tailed_Duck", "Long-tailed_Jaeger", "Parasitic_Jaeger", "Pectoral_Sandpiper", "Red_Knot",
                      "Red-throated_Loon", "Ruddy_Turnstone", "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
@@ -130,12 +176,11 @@ list_name_drivers <- c(
   "Popdensity2010",
   "Railways",
   "Roads")
-
-final_df <- data.frame(species = rep(NA, 864),
-                       mean = rep(NA, 864),
-                       max = rep(NA, 864),
-                       min = rep(NA, 864),
-                       sd = rep(NA, 864))
+final_df <- data.frame(species = rep(NA, 832),
+                       mean = rep(NA, 832),
+                       max = rep(NA, 832),
+                       min = rep(NA, 832),
+                       sd = rep(NA, 832))
 iterator <- 1
 i=1
 j=0
@@ -231,42 +276,409 @@ final_df_filtered$species <- gsub("Tundra Swan", "Tundra_Swan", final_df_filtere
 final_df_filtered$species <- gsub("White-rumped Sandpiper", "White-rumped_Sandpiper", final_df_filtered$species)
 
 # Split first column into 3 (species, range number, stressor)
-final_df_filtered <- separate(final_df_filtered, species, into = c("sp", "range", "stressor"), sep = " ")
+final_df_filtered <- tidyr::separate(final_df_filtered, species, into = c("sp", "range", "stressor"), sep = " ")
+
+# Pivot df to look at stressors individually
+final_df_wide <- tidyr::pivot_wider(final_df_filtered, names_from = stressor, values_from = c(mean, max, min, sd))
 
 
 
-# Let's try a model
-model <- glm(ifelse_percent ~ mean * category, data = final_df_filtered, family = "binomial")
+
+
+
+# Models with individual stressors
+
+#####
+model <- glm(perc_binomial ~ mean_inorganic, data = final_df_wide, family = "binomial")
+summary(model)
+resid.model = resid(model)
+plot(fitted(model), resid.model)
+abline(0,0)
+# Summary of model
+plot(model)
 summary(model)
 
-probabilities <- model %>% predict(final_df_filtered, type = "response")
-probabilities
+# Obtaining odds of the slope (odds ratio) for explanatory variables (in this case, just mean exposure)
+exp(model$coefficients[2])
+# Confidence interval on the odds scale
+exp(confint(model)[2,])
+ 
+# Goodness-of-fit
+# PseudoR2
+objects(model)
+pseudoR2 <- (model$null.deviance - model$deviance) / model$null.deviance
+pseudoR2
 
-predicted.classes <- ifelse(probabilities > 0.5, "pos", "neg")
-mean(predicted.classes == final_df_filtered$ifelse_percent)
+glmtoolbox::hltest(model)
 
-# Binomial and quasibinomial ... "Error in eval(family$initialize) : y values must be 0 <= y <= 1"
-# which makes sense... so should we use gaussian instead?
+#####
+model <- glm(perc_binomial ~ mean_invasives, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_lights, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_ocean_pollution, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_plumes_fert, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_plumes_pest, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_population, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_shipping, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Built2009, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_croplands2005, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_NavWater2009, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Lights2009, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Pasture2009, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Popdensity2010, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Roads, data = final_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ mean_Railways, data = final_df_wide, family = "binomial")
+summary(model)
 
-# "Binomial distribution only counts two states, typically represented as 
-# 1 (for a success) or 0 (for a failure), given a number of trials in the data."
-
-# Lots of 0 values.. perhaps negative binomial or Poisson (cant do Poisson because of negative
-# population trends) instead of binomial?
 
 
+# Visualizing data before looking at GLMs of mean, max, min, sd
+plot(perc_binomial ~ mean, data = final_df_filtered)
+plot(percent ~ mean, data = final_df_filtered)
+boxplot(mean ~ percent , data= final_df_filtered)
+
+# mean, max, sd, min models (without species or categories)
+######
+# Let's try a model with means from all stressors & bird ranges
+# Does not converge when using "sp" as random factor
+model <- glm(perc_binomial ~ mean + (1|sp), data = final_df_filtered, family = "binomial")
+
+# Plot of residuals
+resid.model = resid(model)
+plot(fitted(model), resid.model)
+abline(0,0)
+# Summary of model
+plot(model)
+summary(model)
+
+# Obtaining odds of the slope (odds ratio) for explanatory variables 
+# (odds of probability of success for each explanatory variable)
+
+exp(model$coefficients[2])
+# mean 
+# 0.2970207 
+# When the odds value is smaller than 1, interpretation is a little bit more complicated. 
+# When this is the case, we have to take the inverse value (i.e. 1 divided by the odds) to facilitate 
+# interpretation. The interpretation is then how LESS likely it is to observe the event of interest.
 
 
-# "Reworking" of population trends, adding a constant value so all values are above 0
-# and a Poisson could be possible
-new_perc <- final_df_filtered[, 6] + 95
-new_perc <- as.data.frame(new_perc)
-final_df_filtered <- cbind(final_df_filtered, new_perc)
+# Confidence interval on the odds scale
+exp(confint(model)[2,])
+# 2.5 %    97.5 % 
+# 0.1109478 0.7845887 
 
-# ANOVA (?)
-# Estimates how a quantitative dependent variable changes 
-# according to the levels of one or more categorical independent variables.
+# Goodness-of-fit
+# PseudoR2
+objects(model)
+pseudoR2 <- (model$null.deviance - model$deviance) / model$null.deviance
+pseudoR2
+# 0.007862609 very low R2
 
-model_a <- aov(new_perc ~ mean * category, data = final_df_filtered)
-plot(model_a)
-summary(model_a)
+# Hosmer-Lemeshow test... evaluates whether the logistic regression model is a good fit for the data
+glmtoolbox::hltest(model)
+# p-value =  2.6391e-05 very low p-value, indicative of a poor fit
+
+# Plotting model
+ggplot(final_df_filtered, aes(x = mean, y = perc_binomial)) + geom_point() + 
+  stat_smooth(method = "glm", family= "binomial", se = FALSE) + xlab("Mean exposure") +
+  ylab("Populastion trends") + 
+  ggtitle("Binomial population trends as a function of mean exposure")
+
+######
+
+# Let's try a model with max values now 
+# Does not converge when using "sp" as random factor
+model <- glm(perc_binomial ~ max, data = final_df_filtered, family = "binomial")
+
+# Plot of residuals
+resid.model = resid(model)
+plot(fitted(model), resid.model)
+abline(0,0)
+# Summary of model
+plot(model)
+summary(model)
+
+# Obtaining odds of the slope (odds ratio) for explanatory variables (in this case, just mean exposure)
+exp(model$coefficients[2])
+# max 
+# 0.2134073
+# Confidence interval on the odds scale
+
+exp(confint(model)[2,])
+# 2.5 %    97.5 % 
+# 0.1330352 0.3384291  
+
+# Goodness-of-fit
+# PseudoR2
+objects(model)
+pseudoR2 <- (model$null.deviance - model$deviance) / model$null.deviance
+pseudoR2
+# 0.05865134 very low R2
+
+# Hosmer-Lemeshow test... evaluates whether the logistic regression model is a good fit for the data
+glmtoolbox::hltest(model)
+# p-value =  0.43637, much higher than means
+
+######
+# standard deviation
+model <- glm(perc_binomial ~ sd, data = final_df_filtered, family = "binomial")
+
+# Plot of residuals
+resid.model = resid(model)
+plot(fitted(model), resid.model)
+abline(0,0)
+# Summary of model
+plot(model)
+summary(model)
+
+# Obtaining odds of the slope (odds ratio) for explanatory variables
+# (odds of probability of success for each explanatory variable)
+
+exp(model$coefficients[2])
+# sd 
+# 0.002636511 
+# Confidence interval on the odds scale
+
+exp(confint(model)[2,])
+# 2.5 %    97.5 % 
+# 0.0002972836 0.0212812842   
+
+# Goodness-of-fit
+# PseudoR2
+objects(model)
+pseudoR2 <- (model$null.deviance - model$deviance) / model$null.deviance
+pseudoR2
+# 0.04316169 very low R2
+
+# Hosmer-Lemeshow test... evaluates whether the logistic regression model is a good fit for the data
+glmtoolbox::hltest(model)
+# p-value = 0.0034068
+
+######
+model <- glm(perc_binomial ~ min, data = final_df_filtered, family = "binomial")
+
+# Plot of residuals
+resid.model = resid(model)
+plot(fitted(model), resid.model)
+abline(0,0)
+# Summary of model
+plot(model)
+summary(model)
+
+# Obtaining odds of the slope (odds ratio) for explanatory variables (in this case, just mean exposure)
+# (odds of probability of success for each explanatory variable)
+
+exp(model$coefficients[2])
+# min 
+# 0.984218 
+
+# Confidence interval on the odds scale
+exp(confint(model)[2,])
+# 2.5 %    97.5 % 
+# 0.3244942 2.9814796 
+
+# Goodness-of-fit
+# PseudoR2
+objects(model)
+pseudoR2 <- (model$null.deviance - model$deviance) / model$null.deviance
+pseudoR2
+# 1.035565e-06 very low R2
+
+# Hosmer-Lemeshow test... evaluates whether the logistic regression model is a good fit for the data
+glmtoolbox::hltest(model)
+# p-value = 0.75784 high p-value, better fit.. likely because of lots of 0's
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################
+# Let's try a model with just one species, with multiple ranges; Long tailed Duck
+a <- "Long-tailed_Duck"
+lotduc <- subset(final_df_filtered, sp == a)
+
+model_lotduc <- glm(perc_binomial ~ mean, data = lotduc, family = "binomial")
+summary(model_lotduc)
+
+resid.lotduc <- resid(model_lotduc)
+
+plot(fitted(model_lotduc), resid.lotduc)
+abline(0,0)
+
+
+
+# # "Reworking" of population trends, adding a constant value so all values are above 0
+# # and a Poisson could be possible
+# new_perc <- final_df_filtered[, 6] + 95
+# new_perc <- as.data.frame(new_perc)
+# final_df_filtered <- cbind(final_df_filtered, new_perc)
+# 
+# # ANOVA (?)
+# # Estimates how a quantitative dependent variable changes 
+# # according to the levels of one or more categorical independent variables.
+# # In this case, how are population trends of certain species changing based on 
+# # varying levels of exposure to drivers?
+# 
+# model_a <- aov(new_perc ~ mean * sp, data = final_df_filtered)
+# plot(model_a)
+# summary(model_a)
+
+
+
+
+
+
+#### GLMER explorations
+
+# Remove species with 0 population trends (for binomial approach)
+binomial_df <- subset(final_df_filtered, subset = percent !='0')
+# With wide dataset too
+binomial_df_wide <- tidyr::pivot_wider(binomial_df, names_from = stressor, values_from = c(mean, max, min, sd))
+# Now only 10 species, 22 ranges total
+
+# stressor specific models
+#####
+
+#####
+model <- lme4::glmer(perc_binomial ~ mean_invasives + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_lights + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_ocean_pollution + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_plumes_fert + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_plumes_pest + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_population + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_shipping + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Built2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_croplands2005 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_NavWater2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Lights2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Pasture2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Popdensity2010 + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Roads + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Railways + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+
+
+
+#####
+
+# GLM's with removed 0 trend species and means, mins, maxes, and sd's for 
+
+# mean
+model <- lme4::glmer(perc_binomial ~ mean + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# max
+model <- lme4::glmer(perc_binomial ~ max + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# min
+model <- lme4::glmer(perc_binomial ~ min + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# sd
+model <- lme4::glmer(perc_binomial ~ sd + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+
+
+
+# glmer.nb (trying something, didn't work)
+
+# mean
+model <- lme4::glmer.nb(perc_binomial ~ mean + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# max
+model <- lme4::glmer.nb(perc_binomial ~ max + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# min
+model <- lme4::glmer.nb(perc_binomial ~ min + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+# sd
+model <- lme4::glmer.nb(perc_binomial ~ sd + (1|sp), data = binomial_df, family = "binomial")
+summary(model)
+# Plot of residuals vs. fitted
+plot(model)
+
+
