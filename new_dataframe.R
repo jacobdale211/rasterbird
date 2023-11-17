@@ -14,7 +14,8 @@ for (file in files) {
 }
 
 # Remove 2 (Bairds, no pop trends)
-p <- p[-2]
+# DB: If you can, try not to use numbers in brackets like this, because if the order of your elements changes for whatever reason, you would then remove the wrong element. Ideally, you would use a name, or anything that would remain constant. 
+p <- p[-2] 
 # Remove 9 (Pacific Loon, not in study area)
 p <- p[-9]
 
@@ -124,6 +125,7 @@ centroid
 
 # Removing EU and Africa polygons
 rudtur_d <- rudtur_d[-2] # Run 5 times
+# DB: What do you mean run five times? If I understand correctly, I would give the same comment as on line 17.
 
 # 14, Snow Goose
 snogoo_u <- sf::st_union(p[[14]])
@@ -204,6 +206,12 @@ for (i in 1:length(list_num_birds)) {
       a <- dat[uid,]
       
       # Calculate mean, max, and min for the first column
+      # !!!!!!!!!!!!!!!!!!
+      # DB: Be careful, here you are using object names that are all functions, and functions that you are using on top of it. 
+      #     This could be a source of error, because you are essentially replacing the function by an object. I actually wonder 
+      #     whether it might not completely mess with your calculations. The first iterations should be ok, but it's unclear 
+      #     whether the following iterations would be fine. 
+      # !!!!!!!!!!!!!!!!!!
       mean <- mean(a[[1]])
       max <- max(a[[1]])
       min <- min(a[[1]])
@@ -238,6 +246,7 @@ hist(reformatted_data$min)
 hist(reformatted_data$sd)
 
 # Need to remove NA's
+# DB: Are NAs present in all elements of a row or a column, or constrained to single cells? If they are constrained, you may be removing some data points unnecessarily.
 final_df_filtered <- na.omit(reformatted_data)
 
 # Recheck distributions (the same)
@@ -253,12 +262,15 @@ hist(final_df_filtered$percent)
 
 # Reworking data frame to assign binomial values to trends
 # (positve & non-increasing vs decreasing)
+# DB: Does this need to be modified if non-increasing are removed?
 final_df_filtered$perc_binomial <- ifelse(final_df_filtered$percent >= 0, 1, 0)
 
 
 # Reformat species names to get rid of spaces to split first column
 # NOTE: spaces have been removed in list_name_birds() object; no need to run this step if the dataframe
 # is reproduced
+# DB: I think a single line of command could have been enough?
+#     final_df_filtered$species <- gsub(" ", "-", final_df_filtered$species)
 final_df_filtered$species <- gsub("American Golden-Plover", "American_Golden-Plover", final_df_filtered$species)
 final_df_filtered$species <- gsub("Buff-breasted Sandpiper", "Buff-breasted_Sandpiper", final_df_filtered$species)
 final_df_filtered$species <- gsub("Cackling Goose", "Cackling_Goose", final_df_filtered$species)
