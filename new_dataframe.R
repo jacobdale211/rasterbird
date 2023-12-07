@@ -14,8 +14,7 @@ for (file in files) {
 }
 
 # Remove 2 (Bairds, no pop trends)
-# DB: If you can, try not to use numbers in brackets like this, because if the order of your elements changes for whatever reason, you would then remove the wrong element. Ideally, you would use a name, or anything that would remain constant. 
-p <- p[-2] 
+p <- p[-2]
 # Remove 9 (Pacific Loon, not in study area)
 p <- p[-9]
 
@@ -33,12 +32,16 @@ p <- p[-9]
 amgplo_u <- sf::st_union(p[[1]])
 amgplo_d <- sf::st_cast(amgplo_u, "POLYGON")
 
+st_area(amgplo_d)
+
 centroid <- sf::st_centroid(amgplo_d)
 centroid
 
 # 2, Black-bellied_Plover
 blbplo_u <- sf::st_union(p[[2]])
 blbplo_d <- sf::st_cast(blbplo_u, "POLYGON")
+
+st_area(blbplo_d)
 
 centroid <- sf::st_centroid(blbplo_d[[4]])
 centroid
@@ -47,12 +50,16 @@ centroid
 bubsan_u <- sf::st_union(p[[3]])
 bubsan_d <- sf::st_cast(bubsan_u, "POLYGON")
 
+st_area(bubsan_d)
+
 centroid <- sf::st_centroid(bubsan_d)
 centroid
 
 # 4, Cackling Goose
 cacgoo_u <- sf::st_union(p[[4]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
+
+st_area(cacgoo_d)
 
 centroid <- sf::st_centroid(cacgoo_d[[1]])
 centroid
@@ -61,12 +68,16 @@ centroid
 glagul_u <- sf::st_union(p[[5]])
 glagul_d <- sf::st_cast(glagul_u, "POLYGON")
 
+st_area(glagul_d)
+
 centroid <- sf::st_centroid(glagul_d)
 centroid
 
 # 6, King Eider
 kineid_u <- sf::st_union(p[[6]])
 kineid_d <- sf::st_cast(kineid_u, "POLYGON")
+
+st_area(kineid_d)
 
 centroid <- sf::st_centroid(kineid_d)
 centroid
@@ -75,12 +86,16 @@ centroid
 lotduc_u <- sf::st_union(p[[7]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
+st_area(lotduc_d)
+
 centroid <- sf::st_centroid(lotduc_d[[9]])
 centroid
 
 # 8, Long-tailed Jaeger
 lotjae_u <- sf::st_union(p[[8]])
 lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
+
+st_area(lotjae_d)
 
 centroid <- sf::st_centroid(lotjae_d[[13]])
 centroid
@@ -89,6 +104,8 @@ centroid
 parjae_u <- sf::st_union(p[[9]])
 parjae_d <- sf::st_cast(parjae_u, "POLYGON")
 
+st_area(parjae_d)
+
 centroid <- sf::st_centroid(parjae_d[[6]])
 centroid
 
@@ -96,12 +113,16 @@ centroid
 pecsan_u <- sf::st_union(p[[10]])
 pecsan_d <- sf::st_cast(pecsan_u, "POLYGON")
 
+st_area(pecsan_d)
+
 centroid <- sf::st_centroid(pecsan_d)
 centroid
 
 # 11, Red Knot * need to remove EU and Africa populations
 redkno_u <- sf::st_union(p[[11]])
 redkno_d <- sf::st_cast(redkno_u, "POLYGON")
+
+st_area(redkno_d)
 
 centroid <- sf::st_centroid(redkno_d)
 centroid
@@ -113,6 +134,8 @@ redkno_d <- redkno_d[-3] # Run 3 times
 retloo_u <- sf::st_union(p[[12]])
 retloo_d <- sf::st_cast(retloo_u, "POLYGON")
 
+st_area(retloo_d)
+
 centroid <- sf::st_centroid(retloo_d)
 centroid
 
@@ -120,17 +143,19 @@ centroid
 rudtur_u <- sf::st_union(p[[13]])
 rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
 
+st_area(rudtur_d)
+
 centroid <- sf::st_centroid(rudtur_d)
 centroid
 
 # Removing EU and Africa polygons
 rudtur_d <- rudtur_d[-2] # Run 5 times
-# DB: What do you mean run five times? If I understand correctly, I would give the same comment as on line 17.
 
 # 14, Snow Goose
 snogoo_u <- sf::st_union(p[[14]])
 snogoo_d <- sf::st_cast(snogoo_u, "POLYGON")
 
+st_area(snogoo_d)
 centroid <- sf::st_centroid(snogoo_d)
 centroid
 
@@ -138,12 +163,16 @@ centroid
 tunswa_u <- sf::st_union(p[[15]])
 tunswa_d <- sf::st_cast(tunswa_u, "POLYGON")
 
+st_area(tunswa_d)
+
 centroid <- sf::st_centroid(tunswa_d)
 centroid
 
 # 16, White-rumped Sandpiper
 whrsan_u <- sf::st_union(p[[16]])
 whrsan_d <- sf::st_cast(whrsan_u, "POLYGON")
+
+st_area(whrsan_d)
 
 centroid <- sf::st_centroid(whrsan_d)
 centroid
@@ -187,6 +216,9 @@ iterator <- 1
 i=1
 j=0
 k=1
+
+# Need to add lat/long to loop in the future
+
 # loop once per bird type
 for (i in 1:length(list_num_birds)) {
   current_bird <- list_birds[[i]]
@@ -206,12 +238,6 @@ for (i in 1:length(list_num_birds)) {
       a <- dat[uid,]
       
       # Calculate mean, max, and min for the first column
-      # !!!!!!!!!!!!!!!!!!
-      # DB: Be careful, here you are using object names that are all functions, and functions that you are using on top of it. 
-      #     This could be a source of error, because you are essentially replacing the function by an object. I actually wonder 
-      #     whether it might not completely mess with your calculations. The first iterations should be ok, but it's unclear 
-      #     whether the following iterations would be fine. 
-      # !!!!!!!!!!!!!!!!!!
       mean <- mean(a[[1]])
       max <- max(a[[1]])
       min <- min(a[[1]])
@@ -246,7 +272,6 @@ hist(reformatted_data$min)
 hist(reformatted_data$sd)
 
 # Need to remove NA's
-# DB: Are NAs present in all elements of a row or a column, or constrained to single cells? If they are constrained, you may be removing some data points unnecessarily.
 final_df_filtered <- na.omit(reformatted_data)
 
 # Recheck distributions (the same)
@@ -262,15 +287,12 @@ hist(final_df_filtered$percent)
 
 # Reworking data frame to assign binomial values to trends
 # (positve & non-increasing vs decreasing)
-# DB: Does this need to be modified if non-increasing are removed?
 final_df_filtered$perc_binomial <- ifelse(final_df_filtered$percent >= 0, 1, 0)
 
 
 # Reformat species names to get rid of spaces to split first column
 # NOTE: spaces have been removed in list_name_birds() object; no need to run this step if the dataframe
 # is reproduced
-# DB: I think a single line of command could have been enough?
-#     final_df_filtered$species <- gsub(" ", "-", final_df_filtered$species)
 final_df_filtered$species <- gsub("American Golden-Plover", "American_Golden-Plover", final_df_filtered$species)
 final_df_filtered$species <- gsub("Buff-breasted Sandpiper", "Buff-breasted_Sandpiper", final_df_filtered$species)
 final_df_filtered$species <- gsub("Cackling Goose", "Cackling_Goose", final_df_filtered$species)
@@ -323,50 +345,52 @@ pseudoR2
 
 glmtoolbox::hltest(model)
 
-#####
-model <- glm(perc_binomial ~ mean_invasives, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_inorganic, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_lights, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_invasives, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_ocean_pollution, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_lights, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_plumes_fert, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_ocean_pollution, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_plumes_pest, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_plumes_fert, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_population, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_plumes_pest, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_shipping, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_population, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Built2009, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_shipping, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_croplands2005, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_Built2009, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_NavWater2009, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_croplands2005, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Lights2009, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_NavWater2009, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Pasture2009, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_Lights2009, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Popdensity2010, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_Pasture2009, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Roads, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_Popdensity2010, data = binomial_df_wide, family = "binomial")
 summary(model)
 #####
-model <- glm(perc_binomial ~ mean_Railways, data = final_df_wide, family = "binomial")
+model <- glm(perc_binomial ~ max_Roads, data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- glm(perc_binomial ~ max_Railways, data = binomial_df_wide, family = "binomial")
 summary(model)
 
 
@@ -585,81 +609,95 @@ binomial_df <- subset(final_df_filtered, subset = percent !='0')
 binomial_df_wide <- tidyr::pivot_wider(binomial_df, names_from = stressor, values_from = c(mean, max, min, sd))
 # Now only 10 species, 22 ranges total
 
+# didnt work
+# # adjusting optimization parameters to potentially improve convergence. For example, you can increase the 
+# # maximum number of iterations (nAGQ) and/or use a different optimization algorithm (e.g., bobyqa).
+# model <- lme4::glmer(perc_binomial ~ mean_inorganic  + (1|sp), data = binomial_df_wide, family = "binomial", weights = time, nAGQ = 10, control = lme4::glmerControl(optimizer = "bobyqa"))
+# summary(model)
+
+# rescaling
+# scaled_data <- scale(binomial_df_wide[, c("mean_inorganic", "range_scale", "lat", "long","time")])
+# scaled_data <- cbind(scaled_data, binomial_df_wide[, c("perc_binomial", "sp")])
+# 
+# model <- lme4::glmer(perc_binomial ~ mean_inorganic + range_size + (1|sp), data = scaled_data, family = "binomial")
+# summary(model)
+
 # stressor specific models
 #####
 
-#####
-model <- lme4::glmer(perc_binomial ~ mean_invasives + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_inorganic, data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_lights + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_invasives  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_ocean_pollution + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_lights  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_plumes_fert + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_ocean_pollution  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_plumes_pest + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_plumes_fert  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_population + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_plumes_pest  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_shipping + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_population  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Built2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_shipping  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_croplands2005 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_Built2009  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_NavWater2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_croplands2005  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Lights2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_NavWater2009  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Pasture2009 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_Lights2009  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Popdensity2010 + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_Pasture2009  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Roads + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_Popdensity2010  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ mean_Railways + (1|sp), data = binomial_df_wide, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean_Roads  , data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ mean_Railways  , data = binomial_df_wide, family = "binomial" )
 summary(model)
 
 
 
 #####
 
-# GLM's with removed 0 trend species and means, mins, maxes, and sd's for 
-
+# GLM's with removed 0 trend species and means, mins, maxes, and sd's for all stressors
 # mean
-model <- lme4::glmer(perc_binomial ~ mean + (1|sp), data = binomial_df, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ mean + (1|sp), data = binomial_df, family = "binomial" , weights = time_scale)
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # max
-model <- lme4::glmer(perc_binomial ~ max + (1|sp), data = binomial_df, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ max + (1|sp), data = binomial_df, family = "binomial" , weights = time_scale)
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # min
-model <- lme4::glmer(perc_binomial ~ min + (1|sp), data = binomial_df, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ min + (1|sp), data = binomial_df, family = "binomial" , weights = time_scale)
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # sd
-model <- lme4::glmer(perc_binomial ~ sd + (1|sp), data = binomial_df, family = "binomial")
+model <- lme4::glmer(perc_binomial ~ sd + (1|sp), data = binomial_df, family = "binomial" , weights = time_scale)
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
@@ -693,4 +731,62 @@ summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
+#########################
+model <- lme4::glmer(perc_binomial ~ long + (1|sp), data = binomial_df_wide, family = "binomial")
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
+#####
+model <- lme4::glmer(perc_binomial ~ range_scale + (1|sp), data = binomial_df_wide, family = "binomial" )
+summary(model)
 
+
+
+write.csv(binomial_df, file = "test.csv", row.names = FALSE)
+
+binomial_1 <- read.csv("binomial_1.csv")
+binomial_0 <- read.csv("binomial_0.csv")
+
+hist(binomial_df$mean)
+hist(binomial_0$mean)
+hist(binomial_1$mean)
