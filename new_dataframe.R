@@ -264,11 +264,11 @@ write.csv(final_df, file = "name.csv", row.names = FALSE)
 # Read in csv (choose your fighter)
 
 # OG data 
-reformatted_data <- read.csv("final_df.csv") 
+reformatted_data <- read.csv("final_df_original.csv") 
 # Aggregate data
-reformatted_data <- read.csv("final_df_new.csv")
+reformatted_data <- read.csv("final_df_agg.csv")
 # No CRS assignment data
-reformatted_data <- read.csv("final_df_three.csv")
+reformatted_data <- read.csv("final_df_nc.csv")
 
 reformatted_data$max <- as.numeric(reformatted_data$max)
 
