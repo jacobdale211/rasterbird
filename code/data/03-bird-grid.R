@@ -43,7 +43,7 @@ nm <- gsub(" ","_", brange$species)
 
 for(i in 1:nrow(brange)) {
   print(i)
-  sf::st_buffer(brange[i,], 2) |> # in degrees
+  sf::st_buffer(brange[i,], 1) |> # in degrees
   stars::st_rasterize(dy = .1, dx = .1) |> # use cell-size  
   stars::write_stars(paste0(path,"bird-grid_",nm[i],".tif"))
 }
@@ -61,7 +61,7 @@ bbox <- c(
   sf::st_as_sfc()
 crop <- brange[18,][bbox, ]
 
-sf::st_buffer(crop, 2) |> # in degrees
+sf::st_buffer(crop, 1) |> # in degrees
   stars::st_rasterize(dy = .1, dx = .1) |> # use cell-size  
   stars::write_stars(paste0(path,"bird-grid_Red_Knot.tif"))
 

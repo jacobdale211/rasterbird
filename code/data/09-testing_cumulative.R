@@ -48,12 +48,14 @@ dat <- data.frame(
   )
 
 # Joining exposure and Rosenberg data
+
+# NA's in Long-tailed Jaeger distribution ??
 alldat <- dplyr::left_join(
   dat, 
   r[,c("species","percent_change","category")], 
   by = c("bird" = "species")
 ) |>
-  na.omit()
+ na.omit()
 
 # Rework exposure mean with vulnerability matrix (tabled til vulnerability rework)
 # v[,5] <- as.numeric(v[,5])
@@ -162,7 +164,63 @@ model9 <- MCMCglmm::MCMCglmm(new_perc ~ exposure_mean * category, data = alldat)
 plot(model9)
 summary(model9)
 
-# Bayesian GLM with GLMM (non-transformed data; priors not yet applied)
+# Bayesian GLM with GLMM (non-transformed data)
 model10 <- MCMCglmm::MCMCglmm(perc ~ exposure_mean * category, data = alldat)
 plot(model10)
 summary(model10)
+
+# # # # Bayesian (again) # # # #
+
+# "Need a stronger prior" when including individual species (bird), but works
+# fine when including just category and population trends ... let's see how it looks
+
+model11 <- MCMCglmm::MCMCglmm(perc ~ 1, random = ~ category + exposure_mean, data = alldat)
+summary(model11)
+
+#Posterior distribution plots
+par(mfrow = c(1,3))
+
+hist(mcmc(model11$VCV)[,"category"])
+hist(mcmc(model11$VCV)[,"exposure_mean"])
+
+par(mfrow=c(1,1))
+
+# Here we can see that the distribution of variance for Location and Species is pressed right up against zero.
+# For a random effect to be significant, we want the tails to be well removed from zero.
+
+# Assessing model convergence
+plot(model11$Sol)
+
+# Assessing model convergence with variance of random effects
+plot(model11$VCV)
+
+# Looking at this plot, it suggests we will need a stronger prior... also evident by the 
+# error in the beginning, and the inability to include species as an effect
+
+# # #
+
+# # # # Bayesian (again, with transformed population percent changes) # # # #
+
+# "Need a stronger prior" when including individual species, but works
+# fine when including just category and population trends
+
+model12 <- MCMCglmm::MCMCglmm(new_perc ~ 1, random = ~ category + exposure_mean, data = alldat)
+summary(model12)
+
+#Posterior distribution plots - assessing significance
+par(mfrow = c(2,2))
+
+hist(mcmc(model12$VCV)[,"category"])
+hist(mcmc(model12$VCV)[,"exposure_mean"])
+
+par(mfrow=c(1,1))
+
+# Assessing model convergence
+plot(model12$Sol)
+
+# Assessing model convergence with variance of random effects
+plot(model12$VCV)
+
+alldatnewnew <- alldat[-4,]
+alldatnewnew <- alldatnewnew[-11,]
+hist(alldatnewnew$perc)

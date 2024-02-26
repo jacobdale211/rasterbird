@@ -57,9 +57,9 @@ cacgoo_u <- sf::st_union(p[[4]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
 
 
-# 5, Glaucous Gull
-glagul_u <- sf::st_union(p[[5]])
-glagul_d <- sf::st_cast(glagul_u, "POLYGON")
+# # 5, Glaucous Gull
+# glagul_u <- sf::st_union(p[[5]])
+# glagul_d <- sf::st_cast(glagul_u, "POLYGON")
 
 
 # 6, King Eider
@@ -72,13 +72,13 @@ lotduc_u <- sf::st_union(p[[7]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
 
-# 8, Long-tailed Jaeger
-lotjae_u <- sf::st_union(p[[8]])
-lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
-
-# 9, Parasitic Jaeger
-parjae_u <- sf::st_union(p[[9]])
-parjae_d <- sf::st_cast(parjae_u, "POLYGON")
+# # 8, Long-tailed Jaeger
+# lotjae_u <- sf::st_union(p[[8]])
+# lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
+# 
+# # 9, Parasitic Jaeger
+# parjae_u <- sf::st_union(p[[9]])
+# parjae_d <- sf::st_cast(parjae_u, "POLYGON")
 
 
 
@@ -93,7 +93,7 @@ redkno_d <- sf::st_cast(redkno_u, "POLYGON")
 
 
 # Removing EU and Africa polygons
-redkno_d <- redkno_d[[-3]] # Run 3 times
+redkno_d <- redkno_d[-3] # Run 3 times
 
 # 12, Red-throated Loon, 1 range
 retloo_u <- sf::st_union(p[[12]])
@@ -170,10 +170,10 @@ final_df <- data.frame(species = rep(NA, 832),
                        max = rep(NA, 832),
                        min = rep(NA, 832),
                        sd = rep(NA, 832))
-iterator <- 1
- i=1
- j=0
- k=1
+# iterator <- 1
+#  i=1
+#  j=0
+#  k=1
  
 ##### Aggregate loop (functional)
  
@@ -213,10 +213,10 @@ iterator <- 1
 # }
 
 
-# iterator <- 1
-# i=1
-# j=0
-# k=1
+iterator <- 1
+i=1
+j=0
+k=1
 
 ##### Loop that doesn't work :(
 # Line 230 is the line that causes the problem; line 234 runs indefinitely 
@@ -273,10 +273,10 @@ reformatted_data <- read.csv("final_df_nc.csv")
 reformatted_data$max <- as.numeric(reformatted_data$max)
 
 # Check distributions
-hist(reformatted_data$mean) 
-hist(reformatted_data$max)
-hist(reformatted_data$min)
-hist(reformatted_data$sd)
+# hist(reformatted_data$mean) 
+# hist(reformatted_data$max)
+# hist(reformatted_data$min)
+# hist(reformatted_data$sd)
 
 # Need to remove NA's
 # DB: Are NAs present in all elements of a row or a column, or constrained to single cells? 
@@ -285,15 +285,15 @@ hist(reformatted_data$sd)
  final_df_filtered <- na.omit(reformatted_data)
  
  
-# Recheck distributions (the same)
-hist(final_df_filtered$mean) 
-hist(final_df_filtered$max)
-hist(final_df_filtered$min)
-hist(final_df_filtered$sd)
-
-# Population trend distributions (not accurate because of the way data is formatted in this DF)
-hist(final_df_filtered$percent)
-# Still lots of negatives!
+# # Recheck distributions (the same)
+# hist(final_df_filtered$mean) 
+# hist(final_df_filtered$max)
+# hist(final_df_filtered$min)
+# hist(final_df_filtered$sd)
+# 
+# # Population trend distributions (not accurate because of the way data is formatted in this DF)
+# hist(final_df_filtered$percent)
+# # Still lots of negatives!
 
 
 # Reworking data frame to assign binomial values to trends
@@ -643,79 +643,82 @@ binomial_df_wide <- tidyr::pivot_wider(binomial_df, names_from = stressor, value
 # stressor specific models
 #####
 
-model <- lme4::glmer(perc_binomial ~ max_inorganic+ range_scale   + (1|sp), data = binomial_df_wide, family = "binomial", weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_inorganic  + range_scale + (1|sp), data = binomial_df_wide, family = "binomial", weights = time_scale )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_invasives   + range_scale + (1|sp) , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_invasives  + range_scale  + (1|sp) , data = binomial_df_wide, family = "binomial" ,  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_lights + (1|sp) + range_scale  , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_lights + range_scale+ (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_ocean_pollution + (1|sp)  + range_scale, data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_ocean_pollution + range_scale+ (1|sp)   , data = binomial_df_wide, family = "binomial" ,  weights = time_scale )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_plumes_fert + (1|sp)+ range_scale  , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_plumes_fert + range_scale+ (1|sp)   , data = binomial_df_wide, family = "binomial" ,  weights = time_scale )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_plumes_pest + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_plumes_pest + range_scale+ (1|sp)   , data = binomial_df_wide, family = "binomial" ,  weights = time_scale )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_population  + (1|sp) + range_scale, data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_population  + range_scale + (1|sp), data = binomial_df_wide, family = "binomial" ,  weights = time_scale)
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_shipping+ (1|sp) + range_scale  , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_shipping + range_scale + (1|sp), data = binomial_df_wide, family = "binomial" ,  weights = time_scale )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Built2009 + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_Built2009 + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_croplands2005 + (1|sp)  + range_scale, data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_croplands2005 + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_NavWater2009 + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_NavWater2009 + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Lights2009 + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_Lights2009 + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Pasture2009 + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial", weights = time_scale )
+model <- lme4::glmer(perc_binomial ~  max_Pasture2009 + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Popdensity2010 + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_Popdensity2010 + range_scale + (1|sp), data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Roads + (1|sp) + range_scale , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_Roads + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 #####
-model <- lme4::glmer(perc_binomial ~ max_Railways + (1|sp)+ range_scale  , data = binomial_df_wide, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~  max_Railways + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 
-
+pp <- sjPlot::plot_model(model, type ="pred",
+                 terms = c("max_lights", "range_scale"), pred.type="re", axis.title = c("Light pollution","Probability"), legend.title = "Range size (scaled)", 
+                 title= "Predicted Probabilities of Positive Population Trends", show.legend = FALSE)
+pp
 
 #####
 
-# GLM's with removed 0 trend species and means, maxs, maxes, and sd's for all stressors
+# GLM's with removed 0 trend species and means, maxs, maxes, and min's for all stressors
 # mean
-model <- lme4::glmer(perc_binomial ~ mean + (1|sp) + range_scale, data = binomial_df, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~ mean + range_scale+ (1|sp), data = binomial_df, family = "binomial" )
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # max
-model <- lme4::glmer(perc_binomial ~ max + (1|sp) + range_scale, data = binomial_df, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~ max + range_scale + (1|sp), data = binomial_df, family = "binomial" )
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # min
-model <- lme4::glmer(perc_binomial ~ min + (1|sp) + range_scale, data = binomial_df, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~ min + (1|sp), data = binomial_df, family = "binomial")
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
 
 # sd
-model <- lme4::glmer(perc_binomial ~ sd + (1|sp) + range_scale, data = binomial_df, family = "binomial" , weights = time_scale)
+model <- lme4::glmer(perc_binomial ~ sd + (1|sp), data = binomial_df, family = "binomial" )
 summary(model)
 # Plot of residuals vs. fitted
 plot(model)
