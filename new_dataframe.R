@@ -1,9 +1,4 @@
 # Multipolygon to polygon
-
-
-
-# Basically, if you could run lines 6 through 175, and then the loop starting at 224, that is all I need to have verified 
-# Just not the comments for the Red Knot and Ruddy Turnstone on lines 95 & 105
 library(stars)
 library(sf)
 
@@ -19,10 +14,9 @@ for (file in files) {
 
 # (Fine for the moment because I know the orientation of the files, but I will change it in the future)
 # Remove 2 (Bairds, no pop trends)
-p <- p[-2]
-# Remove 9 (Pacific Loon, not in study area)
-p <- p[-9]
-
+# p <- p[-2]
+# Remove 6 (Common-ringed Plover, not in study area)
+ p <- p[-6]
 
 
 # Birds that need to have separated ranges:
@@ -33,97 +27,163 @@ p <- p[-9]
 # Note: buffer of 2 degrees applied already in bird grid.. no need to reapply
 # for restructuring of ranges 
 
+
+
+# Function to add species column for Philippe's method
+# add_species_column <- function(sfg_object, species_vector) {
+#   coords <- st_coordinates(sfg_object)
+#   
+#   new_df <- data.frame(x = coords[, 1], y = coords[, 2], species = species_vector)
+#   
+#   new_sfg_object <- st_as_sf(new_df, coords = c("x", "y"), crs = st_crs(sfg_object))
+#   return(new_sfg_object)
+# }
+
+
+
 # 1, American Golden-Plover, 1 range
 amgplo_u <- sf::st_union(p[[1]])
 amgplo_d <- sf::st_cast(amgplo_u, "POLYGON")
 
-# st_area(amgplo_d)
-# 
-# centroid <- sf::st_centroid(amgplo_d)
-# centroid
+st_area(amgplo_d)
 
-# 2, Black-bellied_Plover
-blbplo_u <- sf::st_union(p[[2]])
+#READDED### 2 Bairds Sandpiper
+baisan_u <- sf::st_union(p[[2]])
+baisan_d <- sf::st_cast(baisan_u, "POLYGON")
+
+# 3, Black-bellied_Plover
+blbplo_u <- sf::st_union(p[[3]])
 blbplo_d <- sf::st_cast(blbplo_u, "POLYGON")
 
 
-# 3, Buff-breasted Sandpiper, 1 range
-bubsan_u <- sf::st_union(p[[3]])
+# 4, Buff-breasted Sandpiper, 1 range
+bubsan_u <- sf::st_union(p[[4]])
 bubsan_d <- sf::st_cast(bubsan_u, "POLYGON")
 
-
-# 4, Cackling Goose
-cacgoo_u <- sf::st_union(p[[4]])
+# 5, Cackling Goose
+cacgoo_u <- sf::st_union(p[[5]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
 
 
-# # 5, Glaucous Gull
-# glagul_u <- sf::st_union(p[[5]])
-# glagul_d <- sf::st_cast(glagul_u, "POLYGON")
+# # 6, Glaucous Gull
+ glagul_u <- sf::st_union(p[[6]])
+ glagul_d <- sf::st_cast(glagul_u, "POLYGON")
 
 
-# 6, King Eider
-kineid_u <- sf::st_union(p[[6]])
+# 7, King Eider
+kineid_u <- sf::st_union(p[[7]])
 kineid_d <- sf::st_cast(kineid_u, "POLYGON")
 
-
-# 7, Long-tailed Duck
-lotduc_u <- sf::st_union(p[[7]])
+# 8, Long-tailed Duck
+lotduc_u <- sf::st_union(p[[8]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
+# 9 Pacific Loon
+pacloo_u <- sf::st_union(p[[9]])
+pacloo_d <- sf::st_cast(pacloo_u, "POLYGON")
 
-# # 8, Long-tailed Jaeger
-# lotjae_u <- sf::st_union(p[[8]])
-# lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
+# # 10, Long-tailed Jaeger
+lotjae_u <- sf::st_union(p[[10]])
+lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
 # 
-# # 9, Parasitic Jaeger
-# parjae_u <- sf::st_union(p[[9]])
-# parjae_d <- sf::st_cast(parjae_u, "POLYGON")
+# # 11, Parasitic Jaeger
+parjae_u <- sf::st_union(p[[11]])
+parjae_d <- sf::st_cast(parjae_u, "POLYGON")
 
 
 
-# 10, Pectoral Sandpiper
-pecsan_u <- sf::st_union(p[[10]])
+# 12, Pectoral Sandpiper
+pecsan_u <- sf::st_union(p[[12]])
 pecsan_d <- sf::st_cast(pecsan_u, "POLYGON")
 
 
-# 11, Red Knot * need to remove EU and Africa populations
-redkno_u <- sf::st_union(p[[11]])
+# 13, Red Knot * need to remove EU and Africa populations
+redkno_u <- sf::st_union(p[[13]])
 redkno_d <- sf::st_cast(redkno_u, "POLYGON")
-
+# indices <- c(1,4,8)
+# redkno_d <- redkno_d[indices]
 
 # Removing EU and Africa polygons
-redkno_d <- redkno_d[-3] # Run 3 times
+# removed because America crop solves this issue
+# redkno_d <- redkno_d[-3] # Run 3 times
 
-# 12, Red-throated Loon, 1 range
-retloo_u <- sf::st_union(p[[12]])
+# 14, Red-throated Loon, 1 range
+retloo_u <- sf::st_union(p[[14]])
 retloo_d <- sf::st_cast(retloo_u, "POLYGON")
 
 
-# 13, Ruddy Turnstone * need to remove EU and Africa populations
-rudtur_u <- sf::st_union(p[[13]])
+# 15, Ruddy Turnstone * need to remove EU and Africa populations
+rudtur_u <- sf::st_union(p[[15]])
 rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
-
+# indices <- c(10)
+# rudtur_d <- rudtur_d[indices]
 
 # Removing EU and Africa polygons
-rudtur_d <- rudtur_d[-1]# Run 5 times, then rudtur_d[-2]
-rudtur_d <- rudtur_d[-2]# Run 1
+# removed because America crop solves this issue
+# rudtur_d <- rudtur_d[-1]# Run 5 times, then rudtur_d[-2]
+# rudtur_d <- rudtur_d[-2]# Run 1
 # DB: Not sure how to make this more efficient ??
 # Yes, I agree.
 
-# 14, Snow Goose
-snogoo_u <- sf::st_union(p[[14]])
+# 16, Snow Goose
+snogoo_u <- sf::st_union(p[[16]])
 snogoo_d <- sf::st_cast(snogoo_u, "POLYGON")
 
 
-# 15, Tundra Swan, 1 range
-tunswa_u <- sf::st_union(p[[15]])
+# 17, Tundra Swan, 1 range
+tunswa_u <- sf::st_union(p[[17]])
 tunswa_d <- sf::st_cast(tunswa_u, "POLYGON")
 
 
-# 16, White-rumped Sandpiper
-whrsan_u <- sf::st_union(p[[16]])
+# 18, White-rumped Sandpiper
+whrsan_u <- sf::st_union(p[[18]])
 whrsan_d <- sf::st_cast(whrsan_u, "POLYGON")
+
+# For jacob script
+birds <- list(
+  amgplo_d,
+  baisan_d,
+  blbplo_d,
+  bubsan_d,
+  cacgoo_d,
+  glagul_d,
+  kineid_d,
+  lotduc_d,
+  lotjae_d,
+  pacloo_d,
+  parjae_d,
+  pecsan_d,
+  redkno_d,
+  retloo_d,
+  rudtur_d,
+  snogoo_d,
+  tunswa_d,
+  whrsan_d) |>
+  lapply(sf::st_as_sf) |>
+  dplyr::bind_rows()
+
+america_poly <- sf::st_read("america.geojson")
+
+library(ggplot2)
+ggplot() +
+  geom_sf(data = birds, fill = "blue", color = "black") +
+  geom_sf(data = america_poly, fill = "red", color = "black") +
+  labs(title = "Polygons1 and Polygons2 on Top of Each Other") +
+  theme_minimal()
+
+
+
+
+
+#BEFORE americas crop!!! (EU ranges are present)
+st_write(birds, "birds_upd.gpkg", driver = "GPKG", append=FALSE)
+
+# shp <- st_read(
+#   "birds.gpkg")
+# america_poly <- st_read("america.geojson")
+# shp <- st_crop(shp, america_poly)
+
+
 
 
 # Get drivers
@@ -141,13 +201,15 @@ drivers <- dir("data/data-stressors", full.names = TRUE) |>
 # install.packages("exactextractr")
 
 
-list_birds <- c(amgplo_d, blbplo_d, bubsan_d, cacgoo_d, glagul_d, kineid_d, lotduc_d, lotjae_d, parjae_d,
+# removed glagul_d, lotjae_d, parjae_d
+list_birds <- c(amgplo_d, blbplo_d, bubsan_d, cacgoo_d, kineid_d, lotduc_d,
                 pecsan_d, redkno_d, retloo_d, rudtur_d, snogoo_d, tunswa_d, whrsan_d)
 
-list_num_birds <- c(1, 4, 1, 2, 1, 3, 9, 13, 6, 2, 2, 1, 1, 2, 1, 3)
-list_name_birds <- c("American_Golden-Plover", "Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose", "Glaucous_Gull",
-                     "King_Eider", "Long-tailed_Duck", "Long-tailed_Jaeger", "Parasitic_Jaeger", "Pectoral_Sandpiper", "Red_Knot",
+list_num_birds <- c(1, 7, 1, 3, 3, 12, 2, 3, 1, 1, 2, 1, 4)
+list_name_birds <- c("American_Golden-Plover", "Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose",
+                     "King_Eider", "Long-tailed_Duck", "Pectoral_Sandpiper", "Red_Knot",
                      "Red-throated_Loon", "Ruddy_Turnstone", "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
+
 list_name_drivers <- c(
   "inorganic",
   "invasives",
@@ -264,7 +326,7 @@ write.csv(final_df, file = "name.csv", row.names = FALSE)
 # Read in csv (choose your fighter)
 
 # OG data 
-reformatted_data <- read.csv("final_df_original.csv") 
+reformatted_data <- read.csv("csv/final_df_original.csv") 
 # Aggregate data
 reformatted_data <- read.csv("final_df_agg.csv")
 # No CRS assignment data
@@ -691,11 +753,12 @@ summary(model)
 model <- lme4::glmer(perc_binomial ~  max_Railways + range_scale + (1|sp)   , data = binomial_df_wide, family = "binomial",  weights = time_scale  )
 summary(model)
 
-pp <- sjPlot::plot_model(model, type ="pred",
-                 terms = c("max_lights", "range_scale"), pred.type="re", axis.title = c("Light pollution","Probability"), legend.title = "Range size (scaled)", 
+pp <- sjPlot::plot_model(model, type ="resid",
+                 terms = c("max_Popdensity2010", "range_scale"), pred.type="re", axis.title = c("Light pollution","Probability"), legend.title = "Range size (scaled)", 
                  title= "Predicted Probabilities of Positive Population Trends", show.legend = FALSE)
 pp
 
+scatter.smooth(binomial_df_wide$max_Lights2009, binomial_df_wide$perc_binomial)
 #####
 
 # GLM's with removed 0 trend species and means, maxs, maxes, and min's for all stressors

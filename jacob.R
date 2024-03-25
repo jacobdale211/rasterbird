@@ -7,7 +7,7 @@ sf_use_s2(FALSE)
 america_poly <- st_read("america.geojson")
 
 shp <- st_read(
-  "birds.gpkg")
+  "birds_upd.gpkg")
 
 shp <- st_crop(shp, america_poly)
 
@@ -17,10 +17,11 @@ shp <- shp %>%
 
 # Getting species and range names
 species <- c()
-list_num_birds <- c(1, 7, 1, 3, 3, 12, 2, 3, 1, 1, 2, 1, 4)
-list_name_birds <- c("American_Golden-Plover", "Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose",
-                     "King_Eider", "Long-tailed_Duck", "Pectoral_Sandpiper", "Red_Knot",
-                     "Red-throated_Loon", "Ruddy_Turnstone", "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
+list_num_birds <- c(1,5,7,1,3,1,2,12,1,10,6,2,3,1,2,2,2,4)
+list_name_birds <- c("American_Golden-Plover", "Bairds_Sandpiper","Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose",
+                     "Glaucous_Gull", "King_Eider", "Long-tailed_Duck", "Long-tailed_Jaeger", "Pacific_Loon","Parasitic_Jaeger",
+                     "Pectoral_Sandpiper",  "Red_Knot", "Red-throated_Loon", "Ruddy_Turnstone",
+                     "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
 
 # Loop over each bird name and number
 for (i in seq_along(list_name_birds)) {
@@ -51,15 +52,15 @@ extract_bird_data <- function(raster_file, shp) {
 files <- list.files("data/data-stressors", full.names = TRUE)
 
 res <- lapply(files, extract_bird_data, shp = shp)
-write.csv(res, "res_terra.csv")
+write.csv(res, "res_terra_moresp.csv")
 
 
 
-###
+### formatting dataframe
 
 
 
-res <- read.csv("res_terra.csv")
+res <- read.csv("res_terra_moresp.csv")
 
 # Clean up new format
 library(dplyr)
@@ -96,11 +97,16 @@ res <- res %>%
 res <- res %>%
   mutate(perc_binomial = case_when(
     sp == "American_Golden-Plover" ~ "0",
+    sp == "Bairds_Sandpiper" ~ "0",
     sp == "Black-bellied_Plover" ~ "0",
     sp == "Buff-breasted_Sandpiper" ~ "0",
     sp == "Cackling_Goose" ~ "1",
+    sp == "Glaucous_Gull" ~ "1",
     sp == "King_Eider" ~ "0",
     sp == "Long-tailed_Duck" ~ "0",
+    sp == "Long-tailed_Jaeger" ~ "1",
+    sp == "Pacific_Loon" ~ "1",
+    sp == "Parasitic_Jaeger" ~ "1",
     sp == "Pectoral_Sandpiper" ~ "0",
     sp == "Red_Knot" ~ "0",
     sp == "Red-throated_Loon" ~ "0",
@@ -115,12 +121,23 @@ res$perc_binomial <- as.numeric(res$perc_binomial)
 res <- res %>%
   mutate(time = case_when(
     sp == "American_Golden-Plover" ~ "2.5",
+    
+    sp == "Bairds_Sandpiper" ~ "3",
+    
     sp == "Black-bellied_Plover" ~ "3.5",
     sp == "Buff-breasted_Sandpiper" ~ "3.5",
     sp == "Cackling_Goose" ~ "1",
+    
+    sp == "Glaucous_Gull" ~ "0.5",
+    
     sp == "King_Eider" ~ "4",
     sp == "Long-tailed_Duck" ~ "1.5",
-    sp == "Pectoral_Sandpiper" ~ "0",
+    
+    sp == "Long-tailed_Jaeger" ~ "1",
+    sp == "Pacific_Loon" ~ "1",
+    sp == "Parasitic_Jaeger" ~ "4",
+    
+    sp == "Pectoral_Sandpiper" ~ "2.5",
     sp == "Red_Knot" ~ "4",
     sp == "Red-throated_Loon" ~ "2.17",
     sp == "Ruddy_Turnstone" ~ "3",
@@ -133,54 +150,8 @@ res$time <- as.numeric(res$time)
 # Rescaling range size
 res$range_scale <- res$range_size / 1e12
 
-write.csv(res, "res_terra_edit.csv")
-
-
-###
-
-
-res <- read.csv("res_terra_edit.csv")
-
-calculate_stats <- function(data, value_column, group_column1, group_column2, group_column3, 
-                            group_column4, group_column5) {
-  # Check if the value column is numeric, if not, try to convert it
-  stats <- data %>%
-    group_by({{group_column1}}, {{group_column2}}, {{group_column3}}, {{group_column4}}, {{group_column5}}) %>%
-    summarise(mean = mean({{value_column}}, na.rm = TRUE),
-              min = min({{value_column}}, na.rm = TRUE),
-              max = max({{value_column}}, na.rm = TRUE),
-              sd = sd({{value_column}}, na.rm = TRUE))
-  
-  return(stats)
-}
-
-result_inorganic <- calculate_stats(res, value_column = inorganic, 
-                                    group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
-                                    group_column4 = perc_binomial, group_column5 = time)
-
-
-model <- lme4::glmer(perc_binomial ~  max  + range_scale + (1|sp), data = result_inorganic, family = "binomial", weights = time)
-summary(model)
+write.csv(res, "res_terra_edit_moresp.csv")
 
 
 
 
-
-
-
-
-
-
-
-
-
-#####outakes
-# 
-# # 1 deg buffer
-# shp_buf <- st_buffer(shp, dist = 1)
-
-# Specify desired bird ranges here 
-# indices <- c(1, 3, 5, 6, 10, 12, 16, 18, 20, 22, 25, 27, 28)
-# # Get bird ranges 
-# shp <- shp[indices,]
-# 
