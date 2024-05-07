@@ -5,6 +5,9 @@ res <- read.csv("res_terra_edit_moresp.csv")
 # Remove extra columns that pop up after exporting too many times
 library(dplyr)
 library(tidyr)
+library(visreg)
+
+
 s_t_r <- c("x")
 res <- res %>%
   select(-contains(s_t_r))
@@ -74,8 +77,10 @@ result <- calculate_stats(res, value_column = inorganic,
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
 summary(model)
 hist(result$mean)
-plot(result$mean, result$perc_binomial, main = "Inorganic pollution")
+scatter.smooth(result$mean, result$perc_binomial, main = "Inorganic pollution")
 performance::r2(model)
+visreg(model)
+
 
 ### invasives
 result <- calculate_stats(res, value_column = invasives, 
@@ -86,6 +91,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Invasive species presence")
 performance::r2(model)
+visreg(model)
 
 ### lights, halpern
 result <- calculate_stats(res, value_column = lights_halp, 
@@ -96,6 +102,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Light pollution (Halpern)")
 performance::r2(model)
+visreg(model)
 
 ### ocean pollution
 result <- calculate_stats(res, value_column = ocn_pol, 
@@ -106,6 +113,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Ocean Pollution")
 performance::r2(model)
+visreg(model)
 
 ### fertilizer plumes
 result <- calculate_stats(res, value_column = plm_fert, 
@@ -116,6 +124,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Fertilizer plumes")
 performance::r2(model)
+visreg(model)
 
 ### pesticide plumes
 result <- calculate_stats(res, value_column = plm_pest, 
@@ -126,6 +135,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Pesticide Plumes")
 performance::r2(model)
+visreg(model)
 
 ### population, halpern
 result <- calculate_stats(res, value_column = pop_halp, 
@@ -136,6 +146,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Population density (Halpern)")
 performance::r2(model)
+visreg(model)
 
 ### shipping
 result <- calculate_stats(res, value_column = ship, 
@@ -146,6 +157,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Shipping")
 performance::r2(model)
+visreg(model)
 
 
 ###venter
@@ -160,6 +172,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Urban Environments")
 performance::r2(model)
+visreg(model)
 
 ### croplands
 result <- calculate_stats(res, value_column = croplands, 
@@ -170,6 +183,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Cropland distribution")
 performance::r2(model)
+visreg(model)
 
 ### lights, venter
 result <- calculate_stats(res, value_column = lights_vent, 
@@ -180,6 +194,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Light pollution (Venter)")
 performance::r2(model)
+visreg(model)
 
 ### waterways
 result <- calculate_stats(res, value_column = navwater, 
@@ -190,6 +205,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Waterway distribution")
 performance::r2(model)
+visreg(model)
 
 ### pastures
 result <- calculate_stats(res, value_column = pastures, 
@@ -200,6 +216,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Pasture distribution")
 performance::r2(model)
+visreg(model)
 
 ### population, venter
 result <- calculate_stats(res, value_column = pop_vent, 
@@ -210,6 +227,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Population density (Venter)")
 performance::r2(model)
+visreg(model)
 
 ### railways
 result <- calculate_stats(res, value_column = railways, 
@@ -220,6 +238,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Railway distribution")
 performance::r2(model)
+visreg(model)
 
 ### roads
 result <- calculate_stats(res, value_column = roads, 
@@ -230,6 +249,7 @@ summary(model)
 hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Road distribution")
 performance::r2(model)
+visreg(model)
 
 ### plots
 library(sjPlot)
@@ -274,6 +294,8 @@ result <- calculate_stats(res, value_column = inorganic,
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + (1|sp), data = result, family = "binomial")
 summary(model)
+performance::r2(model)
+
 
 ### invasives
 result <- calculate_stats(res, value_column = invasives, 
@@ -281,6 +303,7 @@ result <- calculate_stats(res, value_column = invasives,
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean+ (1|sp), data = result, family = "binomial" )
 summary(model)
+performance::r2(model)
 
 ### lights, halpern
 result <- calculate_stats(res, value_column = lights_halp, 
@@ -288,6 +311,7 @@ result <- calculate_stats(res, value_column = lights_halp,
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean   + (1|sp), data = result, family = "binomial" )
 summary(model)
+performance::r2(model)
 
 ### ocean pollution
 result <- calculate_stats(res, value_column = ocn_pol, 
@@ -314,7 +338,7 @@ summary(model)
 result <- calculate_stats(res, value_column = pop_halp, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
-model <- lme4::glmer(perc_binomial ~  mean   + (1|sp), data = result, family = "binomial" )
+model <- lme4::glmer(perc_binomial ~  max   + (1|sp), data = result, family = "binomial" )
 summary(model)
 
 ### shipping
@@ -346,7 +370,7 @@ summary(model)
 result <- calculate_stats(res, value_column = lights_vent, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
-model <- lme4::glmer(perc_binomial ~  mean   + (1|sp), data = result, family = "binomial" )
+model <- lme4::glmer(perc_binomial ~  max   + (1|sp), data = result, family = "binomial" )
 summary(model)
 
 ### waterways
@@ -383,3 +407,153 @@ result <- calculate_stats(res, value_column = roads,
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean   + (1|sp), data = result, family = "binomial" )
 summary(model)
+
+
+
+
+
+
+
+######
+
+### inorganic
+result <- calculate_stats(res, value_column = inorganic, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min   , data = result, family = "binomial")
+summary(model)
+plot(result$min, result$perc_binomial, main = "Inorganic pollution")
+visreg(model)
+
+### invasives
+result <- calculate_stats(res, value_column = invasives, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Invasive species")
+
+### lights, halpern
+result <- calculate_stats(res, value_column = lights_halp, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result)
+summary(model)
+plot(result$min, result$perc_binomial, main = "Light polltuion (Halpern)")
+
+### ocean pollution
+result <- calculate_stats(res, value_column = ocn_pol, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Ocean pollution")
+
+
+### fertilizer plumes
+result <- calculate_stats(res, value_column = plm_fert, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Fertilizer plumes")
+
+### pesticide plumes
+result <- calculate_stats(res, value_column = plm_pest, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Pesticide plumes")
+
+
+### population, halpern
+result <- calculate_stats(res, value_column = pop_halp, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Population density (Haleprn)")
+
+
+### shipping
+result <- calculate_stats(res, value_column = ship, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Shipping")
+
+
+
+###venter
+
+
+### urban environments
+result <- calculate_stats(res, value_column = built, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Urban environments")
+
+
+### croplands
+result <- calculate_stats(res, value_column = croplands, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$max, result$perc_binomial, main = "Cropland distribution")
+
+### lights, venter
+result <- calculate_stats(res, value_column = lights_vent, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$max, result$perc_binomial, main = "Light pollution (Venter)")
+
+
+### waterways
+result <- calculate_stats(res, value_column = navwater, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Waterway distribution")
+
+
+### pastures
+result <- calculate_stats(res, value_column = pastures, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  mean    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Pasture distribution")
+
+
+### population, venter
+result <- calculate_stats(res, value_column = pop_vent, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Population density (Venter)")
+
+### railways
+result <- calculate_stats(res, value_column = railways, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min    , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Railways")
+
+### roads
+result <- calculate_stats(res, value_column = roads, 
+                          group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
+                          group_column4 = perc_binomial, group_column5 = time)
+model <- lm(perc_binomial ~  min   , data = result, family = "binomial" )
+summary(model)
+plot(result$min, result$perc_binomial, main = "Road distribution")
+

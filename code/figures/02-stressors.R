@@ -1,19 +1,58 @@
-source("./code/figures/01-studyarea.R")
-source("./code/functions/renormalization.R")
-x=stressor
-class(x)
-x <- stars::st_as_stars(stressor)
-class(x)
-x2 = log(x+1)
-image(x)
-image(x2)
-x3 <- x2
-x3[[1]] <- quantNorm(x3[[1]])
-image(x3)
+drivers <- dir(
+  here::here("output/data-stressors/"),
+  pattern = ".tif$",
+  full.names = TRUE
+)
+stressors <- lapply(drivers, stars::read_stars)
 
-#grid
-brange_buffer <- sf::st_buffer(brange_small, 10000)
-grid <- sf::st_make_grid(brange_buffer, n = c(20,20))
-uid <- sf::st_intersects(brange_buffer, grid) |> unlist() |> sort()
-uid
-grid <- grid[uid]
+names <- c(
+  "Inorganic pollution",
+  "Invasive species",
+  "Light pollution (Halpern)",
+  "Ocean pollution",
+  "Fertilizer plumes",
+  "Pesticide plumes",
+  "Population density (Halpern)",
+  "Shipping",
+  "Urban Environments",
+  "Croplands",
+  "Light pollution (Venter)",
+  "Waterways",
+  "Pastures",
+  "Population density (Venter)",
+  "Railways",
+  "Roads")
+
+path <- "figures/stressors"
+ if (!dir.exists(path)) {
+   dir.create(path, recursive = TRUE)
+ }
+
+#separated halpern and venter to make background colors different
+
+#halpern
+ for (i in 1:8) {
+   input <- names[[i]]
+   
+   png(file = glue::glue("figures/stressors/{input}.png"))
+   par(bg = "#430c54")
+   par(mar = c(0, 0, 0, 0))
+  image(stressors[[i]], col = viridis::viridis(900), main = NULL)
+  text(x = par("usr")[1], y = par("usr")[4], labels = names[i], col = "white", adj = c(-0.2, 1.9), font = 2)
+  dev.off()
+ }
+#venter
+for (i in 9:16) {
+  input <- names[[i]]
+  
+  png(file = glue::glue("figures/stressors/{input}.png"))
+  par(bg = "#550c54")
+  par(mar = c(0, 0, 0, 0))
+  image(stressors[[i]], col = viridis::viridis(900), main = NULL)
+  text(x = par("usr")[1], y = par("usr")[4], labels = names[i], col = "white", adj = c(-0.2, 1.9), font = 2)
+  dev.off()
+}
+
+# america_poly <- sf::st_read("map.geojson")
+
+ 

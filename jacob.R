@@ -6,6 +6,7 @@ sf_use_s2(FALSE)
 
 america_poly <- st_read("america.geojson")
 
+### NOTE BIRDS_UPD WAS OVERWRITTEN MUST UPDATE
 shp <- st_read(
   "birds_upd.gpkg")
 
