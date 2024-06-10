@@ -1,7 +1,7 @@
 ###
 
 
-res <- read.csv("res_terra_edit_moresp.csv")
+res <- read.csv("csv/massicotte_stats/res_terra_edit.csv")
 # Remove extra columns that pop up after exporting too many times
 library(dplyr)
 library(tidyr)
@@ -71,7 +71,7 @@ calculate_stats <- function(data, value_column, group_column1, group_column2, gr
 }
 
 ### inorganic
-result <- calculate_stats(res, value_column = inorganic, 
+result_inorganic <- calculate_stats(res, value_column = inorganic, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -83,7 +83,7 @@ visreg(model)
 
 
 ### invasives
-result <- calculate_stats(res, value_column = invasives, 
+result_invasives <- calculate_stats(res, value_column = invasives, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -94,7 +94,7 @@ performance::r2(model)
 visreg(model)
 
 ### lights, halpern
-result <- calculate_stats(res, value_column = lights_halp, 
+result_lights_halp <- calculate_stats(res, value_column = lights_halp, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -105,7 +105,7 @@ performance::r2(model)
 visreg(model)
 
 ### ocean pollution
-result <- calculate_stats(res, value_column = ocn_pol, 
+result_ocn_pol <- calculate_stats(res, value_column = ocn_pol, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -116,7 +116,7 @@ performance::r2(model)
 visreg(model)
 
 ### fertilizer plumes
-result <- calculate_stats(res, value_column = plm_fert, 
+result_plm_fert <- calculate_stats(res, value_column = plm_fert, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -127,7 +127,7 @@ performance::r2(model)
 visreg(model)
 
 ### pesticide plumes
-result <- calculate_stats(res, value_column = plm_pest, 
+result_plm_pest <- calculate_stats(res, value_column = plm_pest, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -138,7 +138,7 @@ performance::r2(model)
 visreg(model)
 
 ### population, halpern
-result <- calculate_stats(res, value_column = pop_halp, 
+result_pop_halp <- calculate_stats(res, value_column = pop_halp, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -149,7 +149,7 @@ performance::r2(model)
 visreg(model)
 
 ### shipping
-result <- calculate_stats(res, value_column = ship, 
+result_ship <- calculate_stats(res, value_column = ship, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -164,7 +164,7 @@ visreg(model)
 
 
 ### urban environments
-result <- calculate_stats(res, value_column = built, 
+result_built <- calculate_stats(res, value_column = built, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -175,7 +175,7 @@ performance::r2(model)
 visreg(model)
 
 ### croplands
-result <- calculate_stats(res, value_column = croplands, 
+result_croplands <- calculate_stats(res, value_column = croplands, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -186,7 +186,7 @@ performance::r2(model)
 visreg(model)
 
 ### lights, venter
-result <- calculate_stats(res, value_column = lights_vent, 
+result_lights_vent <- calculate_stats(res, value_column = lights_vent, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -197,7 +197,7 @@ performance::r2(model)
 visreg(model)
 
 ### waterways
-result <- calculate_stats(res, value_column = navwater, 
+result_navwater <- calculate_stats(res, value_column = navwater, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -208,7 +208,7 @@ performance::r2(model)
 visreg(model)
 
 ### pastures
-result <- calculate_stats(res, value_column = pastures, 
+result_pastures <- calculate_stats(res, value_column = pastures, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -219,7 +219,7 @@ performance::r2(model)
 visreg(model)
 
 ### population, venter
-result <- calculate_stats(res, value_column = pop_vent, 
+result_pop_vent <- calculate_stats(res, value_column = pop_vent, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -230,7 +230,7 @@ performance::r2(model)
 visreg(model)
 
 ### railways
-result <- calculate_stats(res, value_column = railways, 
+result_railways <- calculate_stats(res, value_column = railways, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -241,7 +241,7 @@ performance::r2(model)
 visreg(model)
 
 ### roads
-result <- calculate_stats(res, value_column = roads, 
+result_roads <- calculate_stats(res, value_column = roads, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
 model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result, family = "binomial", weights = time)
@@ -250,6 +250,12 @@ hist(result$mean)
 plot(result$mean, result$perc_binomial, main = "Road distribution")
 performance::r2(model)
 visreg(model)
+
+
+
+
+
+
 
 ### plots
 library(sjPlot)

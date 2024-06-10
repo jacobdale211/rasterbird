@@ -16,7 +16,7 @@ pop <- read.csv("data/data-raw/birdlife/birdlife-trends.csv")
 pop <-pop[c("species", "percent_change","category")]
 
 # New population trends for shorebirds
-new <- read.csv("All_Shorebird_migration_survey_wide_trends.csv")
+new <- read.csv("trends/All_Shorebird_migration_survey_wide_trends.csv")
 sbirds <- new[new$trend_type == "Long-term",]
 sbirds$category <- "shorebird"
 

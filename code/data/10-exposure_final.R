@@ -12,7 +12,7 @@ pop <- read.csv("data/data-raw/birdlife/birdlife-trends.csv")
 pop <-pop[c("species", "percent_change","category")]
 
 # New population trends for shorebirds
-new <- read.csv("All_Shorebird_migration_survey_wide_trends.csv")
+new <- read.csv("trends/All_Shorebird_migration_survey_wide_trends.csv")
 sbirds <- new[new$trend_type == "Long-term",]
 sbirds$category <- "shorebird"
 
@@ -22,9 +22,10 @@ final <- filter[c("species", "percent_change","category")]
 r <- rbind(final, pop)
 
 # l <- list()
-# for(i in 1:length(brange)) {
+# for(i in 1:nrow(brange)) {
 #   l[[i]] <- cumul[brange[i, ]]
 # }
+
 
 # Format data
 m <- list()
@@ -66,9 +67,9 @@ dat <- dplyr::left_join(
 # dat$perc <- (dat$perc * -1)
  birds <- dat$bird
 
-# Remove cackling goose
-test <- dat[-4,]
-test_birds <- test$bird
+# # Remove cackling goose
+# test <- dat[-4,]
+# test_birds <- test$bird
 
 # 11 species
 library(ggplot2)
@@ -104,3 +105,11 @@ plot(x = dat$exposure_mean[-c(10,4)], y = dat$perc[-c(10,4)])
 # points(x = seq(1, length(m)), y = means[uid], pch = 21, col = "#88c3b5", bg = "#66281b", cex = 2)
 
 means
+
+m <- list()
+for(i in 1:length(cumul)) {
+  dat <- as.data.frame(cumul[[i]])
+  colnames(dat)[3] <- "data"
+  dat <- dplyr::filter(dat, !is.na(data))
+  m[[i]] <- dat$data
+}

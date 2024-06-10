@@ -1,5 +1,5 @@
-halpern <- dir(
-  here::here("data/data-raw/halpern_cea-4f84f0e3"),
+drivers <- dir(
+  here::here("data/data-stressors/"),
   pattern = ".tif$",
   full.names = TRUE
 )
@@ -7,36 +7,18 @@ halpern <- dir(
 # Had to switch venter dir from "data/data-raw/terrestrial_human_footprint_venter-103a233e",
 # it was different on my computer
 
-venter <- dir(
-  here::here("data/data-raw/venter/Dryadv3/Maps"),
-  pattern = ".tif$",
-  full.names = TRUE
-)
 
-files <- c(halpern, venter)
+files <- c(drivers)
 nm <- basename(files) |> tools::file_path_sans_ext()
 
 # Select stressors to consider
 uid <- c(
-  "halpern_cea-4f84f0e3-2013-artisanal_fishing",
-  "halpern_cea-4f84f0e3-2013-demersal_destructive_fishing",
-  "halpern_cea-4f84f0e3-2013-demersal_nondest_high_bycatch",
-  "halpern_cea-4f84f0e3-2013-demersal_nondest_low_bycatch",
   "halpern_cea-4f84f0e3-2013-inorganic",
   "halpern_cea-4f84f0e3-2013-invasives",
   "halpern_cea-4f84f0e3-2013-night_lights",
-  "halpern_cea-4f84f0e3-2013-ocean_acidification",
-  "halpern_cea-4f84f0e3-2013-ocean_pollution",
-  "halpern_cea-4f84f0e3-2013-oil_rigs",
-  "halpern_cea-4f84f0e3-2013-pelagic_high_bycatch",
-  "halpern_cea-4f84f0e3-2013-pelagic_low_bycatch",
   "halpern_cea-4f84f0e3-2013-plumes_fert",
   "halpern_cea-4f84f0e3-2013-plumes_pest",
   "halpern_cea-4f84f0e3-2013-population",
-  "halpern_cea-4f84f0e3-2013-shipping",
-  "halpern_cea-4f84f0e3-2013-slr",
-  "halpern_cea-4f84f0e3-2013-sst",
-  "halpern_cea-4f84f0e3-2013-uv",
   "terrestrial_human_footprint_venter-103a233e-Built2009",
   "terrestrial_human_footprint_venter-103a233e-croplands2005",
   "terrestrial_human_footprint_venter-103a233e-Lights2009",
@@ -46,7 +28,7 @@ uid <- c(
   "terrestrial_human_footprint_venter-103a233e-Railways",
   "terrestrial_human_footprint_venter-103a233e-Roads"
 )
-
+#   "halpern_cea-4f84f0e3-2013-shipping"  "halpern_cea-4f84f0e3-2013-ocean_pollution"  removed for visualization purposes
 uid <- nm %in% uid
 files <- files[uid]
 nm <- nm[uid]
@@ -82,7 +64,7 @@ for(i in 1:length(files)) {
   dat <- dat[aoi]
 
   # Log transformation
-  dat <- log(dat + 1)
+   dat <- log(dat + 1)
 
   # Standardize
   md <- max(dat[[1]], na.rm = TRUE)
@@ -114,19 +96,21 @@ cumul <- do.call("c", stressors) |>
 
 output2 <- "data/data-cumulative_stressors/"
 if(!file.exists(output2)) dir.create(output2, recursive = TRUE)         
-stars::write_stars(cumul, here::here(output2, "cumulative_stressors.tif"))
+# hashed out to rerun image formaatting, make sure to readd when rerunning full script
+ stars::write_stars(cumul, here::here(output2, "cumulative_stressors.tif"))
 dat <- stars::read_stars(here::here(output2, "cumulative_stressors.tif"))
  dat[[1]][dat[[1]] <= 0] <- NA
 brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
+a_f <- sf::st_read("a_f.gpkg")
 
   out <- "figures/" 
   if(!file.exists(out)) dir.create(out, recursive = TRUE)         
-  png("figures/cumulative_stressors.png", res = 400, width = 200, height = 200, units = "mm", pointsize = 24)
+  png("figures/cumulative_stressors.png", res = 400, width = 200, height = 200, bg = viridis::viridis(900), units = "mm", pointsize = 24)
   par(mar = c(0,0,0,0))
   image(dat, col = viridis::viridis(100))
- # plot(sf::st_geometry(brange[18,]), add = TRUE, border = "#A1B866", lwd = 2)
- # plot(sf::st_geometry(brange[25,]), add = TRUE, border = "#F6C143", lwd = 2)
+  # plot(sf::st_geometry(brange[18,]), add = TRUE, border = "#A1B866", lwd = 2)
+  # plot(sf::st_geometry(brange[25,]), add = TRUE, border = "#F6C143", lwd = 2)
   dev.off()
   
   plot(cumul)
-  
+

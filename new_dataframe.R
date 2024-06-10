@@ -16,7 +16,7 @@ for (file in files) {
 # Remove 2 (Bairds, no pop trends)
 # p <- p[-2]
 # Remove 6 (Common-ringed Plover, not in study area)
- p <- p[-6]
+ # p <- p[-6]
 
 
 # Birds that need to have separated ranges:
@@ -65,40 +65,40 @@ cacgoo_u <- sf::st_union(p[[5]])
 cacgoo_d <- sf::st_cast(cacgoo_u, "POLYGON")
 
 
-# # 6, Glaucous Gull
- glagul_u <- sf::st_union(p[[6]])
- glagul_d <- sf::st_cast(glagul_u, "POLYGON")
+# # # 6, Glaucous Gull
+#  glagul_u <- sf::st_union(p[[6]])
+#  glagul_d <- sf::st_cast(glagul_u, "POLYGON")
 
 
 # 7, King Eider
-kineid_u <- sf::st_union(p[[7]])
+kineid_u <- sf::st_union(p[[6]])
 kineid_d <- sf::st_cast(kineid_u, "POLYGON")
 
 # 8, Long-tailed Duck
-lotduc_u <- sf::st_union(p[[8]])
+lotduc_u <- sf::st_union(p[[7]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
-# 9 Pacific Loon
-pacloo_u <- sf::st_union(p[[9]])
-pacloo_d <- sf::st_cast(pacloo_u, "POLYGON")
+# # 9 Pacific Loon
+# pacloo_u <- sf::st_union(p[[9]])
+# pacloo_d <- sf::st_cast(pacloo_u, "POLYGON")
 
-# # 10, Long-tailed Jaeger
-lotjae_u <- sf::st_union(p[[10]])
-lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
-# 
-# # 11, Parasitic Jaeger
-parjae_u <- sf::st_union(p[[11]])
-parjae_d <- sf::st_cast(parjae_u, "POLYGON")
+# # # 10, Long-tailed Jaeger
+# lotjae_u <- sf::st_union(p[[10]])
+# lotjae_d <- sf::st_cast(lotjae_u, "POLYGON")
+# # 
+# # # 11, Parasitic Jaeger
+# parjae_u <- sf::st_union(p[[11]])
+# parjae_d <- sf::st_cast(parjae_u, "POLYGON")
 
 
 
 # 12, Pectoral Sandpiper
-pecsan_u <- sf::st_union(p[[12]])
+pecsan_u <- sf::st_union(p[[8]])
 pecsan_d <- sf::st_cast(pecsan_u, "POLYGON")
 
 
 # 13, Red Knot * need to remove EU and Africa populations
-redkno_u <- sf::st_union(p[[13]])
+redkno_u <- sf::st_union(p[[9]])
 redkno_d <- sf::st_cast(redkno_u, "POLYGON")
 # indices <- c(1,4,8)
 # redkno_d <- redkno_d[indices]
@@ -108,12 +108,12 @@ redkno_d <- sf::st_cast(redkno_u, "POLYGON")
 # redkno_d <- redkno_d[-3] # Run 3 times
 
 # 14, Red-throated Loon, 1 range
-retloo_u <- sf::st_union(p[[14]])
+retloo_u <- sf::st_union(p[[10]])
 retloo_d <- sf::st_cast(retloo_u, "POLYGON")
 
 
 # 15, Ruddy Turnstone * need to remove EU and Africa populations
-rudtur_u <- sf::st_union(p[[15]])
+rudtur_u <- sf::st_union(p[[11]])
 rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
 # indices <- c(10)
 # rudtur_d <- rudtur_d[indices]
@@ -126,17 +126,17 @@ rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
 # Yes, I agree.
 
 # 16, Snow Goose
-snogoo_u <- sf::st_union(p[[16]])
+snogoo_u <- sf::st_union(p[[12]])
 snogoo_d <- sf::st_cast(snogoo_u, "POLYGON")
 
 
 # 17, Tundra Swan, 1 range
-tunswa_u <- sf::st_union(p[[17]])
+tunswa_u <- sf::st_union(p[[13]])
 tunswa_d <- sf::st_cast(tunswa_u, "POLYGON")
 
 
 # 18, White-rumped Sandpiper
-whrsan_u <- sf::st_union(p[[18]])
+whrsan_u <- sf::st_union(p[[14]])
 whrsan_d <- sf::st_cast(whrsan_u, "POLYGON")
 
 # For jacob script
@@ -146,12 +146,8 @@ birds <- list(
   blbplo_d,
   bubsan_d,
   cacgoo_d,
-  glagul_d,
   kineid_d,
   lotduc_d,
-  lotjae_d,
-  pacloo_d,
-  parjae_d,
   pecsan_d,
   redkno_d,
   retloo_d,
@@ -164,13 +160,13 @@ birds <- list(
 
 america_poly <- sf::st_read("america.geojson")
 
-library(ggplot2)
-ggplot() +
-  geom_sf(data = birds, fill = "blue", color = "black") +
-  geom_sf(data = america_poly, fill = "red", color = "black") +
-  labs(title = "Polygons1 and Polygons2 on Top of Each Other") +
-  theme_minimal()
-
+# library(ggplot2)
+# ggplot() +
+#   geom_sf(data = birds, fill = "blue", color = "black") +
+#   geom_sf(data = america_poly, fill = "red", color = "black") +
+#   labs(title = "Polygons1 and Polygons2 on Top of Each Other") +
+#   theme_minimal()
+# 
 
 
 

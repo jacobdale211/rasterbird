@@ -1,4 +1,6 @@
 source("./code/functions/check.R")
+source("./code/functions/legendEGSL.R")
+
 plt <-"figures/cumulative/"
 tif <-"output/cumulative"
 chk_create(plt)
@@ -46,7 +48,8 @@ for(i in 1:length(birdfolders)) {
   # Export
   par(mfrow = c(1,1))
   png(file = glue::glue("figures/cumulative/{input}.png"))
-  image(cumul, col = viridis::viridis(100), main = "")
+  image(cumul, col = viridis::viridis(100), main = spnm[i])
+  legendEGSL(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
   dev.off()
 }
 
