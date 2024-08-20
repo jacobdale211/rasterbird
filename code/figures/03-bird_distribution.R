@@ -35,8 +35,9 @@ plot(b[7])
 world <- ne_countries(scale = "medium", returnclass = "sf")
 std_ar <- subset(world, continent %in% c("North America", "South America"))
 std_ar <- st_crop(std_ar, america_poly)
+plot(std_ar)
 
-# all flyways 
+# all flyways ***NEED TO RECOVER FLYWAY GEOJSONS***
 fly <- sf::st_read("Shorebird_Americas_Flyway_boundaries.geojson")
 
 # atlantic flyway

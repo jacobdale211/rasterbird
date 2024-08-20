@@ -1,9 +1,13 @@
+# setwd("/Users/jacobdale/rasterbird")
+
 drivers <- dir(
-  here::here("output/data-stressors/"),
+  here::here("data/data-stressors/"),
   pattern = ".tif$",
   full.names = TRUE
 )
+
 stressors <- lapply(drivers, stars::read_stars)
+
 
 names <- c(
   "Inorganic pollution",
@@ -28,15 +32,29 @@ path <- "figures/stressors"
    dir.create(path, recursive = TRUE)
  }
 
+# adding americas map for halpern data
+library(rnaturalearth)
+america_poly <- sf::st_read("map.geojson")
+world <- ne_countries(scale = "medium", returnclass = "sf")
+std_ar <- subset(world, continent %in% c("North America", "South America"))
+std_ar <- sf::st_crop(std_ar, america_poly)
 
 #halpern
  for (i in 1:8) {
    input <- names[[i]]
+   x <- stressors[[i]]
+   x[x==0]<-NA
+   p = log(x+1)
+   p2 = log(p+1)
+   p3 = log(p2+1)
+   p4 = log(p3+1)
    
    png(file = glue::glue("figures/stressors/{input}.png"),width = 800, height = 600, units = "px", res = 150)
-   par(bg = "#430c54")
+   par(bg = "#550c54")
    par(mar = c(0, 0, 0, 0))
-  image(stressors[[i]], col = viridis::viridis(900), main = NULL)
+   plot(sf::st_geometry(std_ar), col = "#3d1151", border = "#3d1151", 
+        xlim = c(-130, -30), ylim = c(-60, 90))
+  image(p4, col = viridis::viridis(900), add = TRUE, main = NULL)
   text(x = par("usr")[1], y = par("usr")[4], labels = names[i], col = "white", adj = c(-0.2, 1.9), font = 2)
   legendEGSL(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
   
