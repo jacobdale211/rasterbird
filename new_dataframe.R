@@ -75,6 +75,11 @@ kineid_u <- sf::st_union(p[[6]])
 kineid_d <- sf::st_cast(kineid_u, "POLYGON")
 
 # 7, Long-tailed Duck
+# 7, King Eider
+kineid_u <- sf::st_union(p[[6]])
+kineid_d <- sf::st_cast(kineid_u, "POLYGON")
+
+# 8, Long-tailed Duck
 lotduc_u <- sf::st_union(p[[7]])
 lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
@@ -93,11 +98,16 @@ lotduc_d <- sf::st_cast(lotduc_u, "POLYGON")
 
 
 # 8, Pectoral Sandpiper
+
+# 12, Pectoral Sandpiper
 pecsan_u <- sf::st_union(p[[8]])
 pecsan_d <- sf::st_cast(pecsan_u, "POLYGON")
 
 
+
 # 9, Red Knot * need to remove EU and Africa populations
+
+# 13, Red Knot * need to remove EU and Africa populations
 redkno_u <- sf::st_union(p[[9]])
 redkno_d <- sf::st_cast(redkno_u, "POLYGON")
 # indices <- c(1,4,8)
@@ -108,11 +118,15 @@ redkno_d <- sf::st_cast(redkno_u, "POLYGON")
 # redkno_d <- redkno_d[-3] # Run 3 times
 
 # 10, Red-throated Loon, 1 range
+
+# 14, Red-throated Loon, 1 range
 retloo_u <- sf::st_union(p[[10]])
 retloo_d <- sf::st_cast(retloo_u, "POLYGON")
 
 
 # 11, Ruddy Turnstone * need to remove EU and Africa populations
+
+# 15, Ruddy Turnstone * need to remove EU and Africa populations
 rudtur_u <- sf::st_union(p[[11]])
 rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
 # indices <- c(10)
@@ -126,16 +140,21 @@ rudtur_d <- sf::st_cast(rudtur_u, "POLYGON")
 # Yes, I agree.
 
 # 12, Snow Goose
+
+# 16, Snow Goose
 snogoo_u <- sf::st_union(p[[12]])
 snogoo_d <- sf::st_cast(snogoo_u, "POLYGON")
 
 
 # 13, Tundra Swan, 1 range
+
+# 17, Tundra Swan, 1 range
 tunswa_u <- sf::st_union(p[[13]])
 tunswa_d <- sf::st_cast(tunswa_u, "POLYGON")
 
 
 # 14, White-rumped Sandpiper
+# 18, White-rumped Sandpiper
 whrsan_u <- sf::st_union(p[[14]])
 whrsan_d <- sf::st_cast(whrsan_u, "POLYGON")
 

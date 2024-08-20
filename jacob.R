@@ -3,6 +3,7 @@ library(sf)
 library(exactextractr)
 library(lwgeom)
 
+
 sf_use_s2(FALSE)
 
 america_poly <- st_read("america.geojson")
@@ -13,6 +14,9 @@ shp <- st_read(
   "birds_upd.gpkg")
 
 #shp <- st_crop(shp, america_poly)
+
+shp <- st_crop(shp, america_poly)
+
 
 # Add bird range areas
 shp <- shp %>%
@@ -27,6 +31,7 @@ list_name_birds <- c("American_Golden-Plover", "Bairds_Sandpiper","Black-bellied
 # removed marine birds
 # "Glaucous_Gull",
 # "Long-tailed_Jaeger", "Pacific_Loon","Parasitic_Jaeger",
+
 
 # Loop over each bird name and number
 for (i in seq_along(list_name_birds)) {
