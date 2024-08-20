@@ -16,3 +16,12 @@ data/data-stressors/
 delete.R
 ouput 
 map.geojson
+*.geojson
+*gpkg
+data/
+output/
+res_terra_edit_moresp.csv
+res_terra_edit.csv
+res_terra_moresp.csv
+*.zip
+*.textClipping
