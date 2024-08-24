@@ -15,7 +15,7 @@ shp <- st_read(
 
 #shp <- st_crop(shp, america_poly)
 
-shp <- st_crop(shp, america_poly)
+# shp <- st_crop(shp, america_poly)
 
 
 # Add bird range areas
@@ -104,6 +104,30 @@ res <- res %>%
   select(-contains(s_t_r))
 
 # Add pos/neg trend
+res <- res %>%
+  mutate(perc = case_when(
+    sp == "American_Golden-Plover" ~ "-73.31",
+    sp == "Bairds_Sandpiper" ~ "-5.28",
+    sp == "Black-bellied_Plover" ~ "-57.39",
+    sp == "Buff-breasted_Sandpiper" ~ "-58.17",
+    sp == "Cackling_Goose" ~ "833.13",
+    sp == "Glaucous_Gull" ~ "0",
+    sp == "King_Eider" ~ "-83.34",
+    sp == "Long-tailed_Duck" ~ "-65.04",
+    sp == "Long-tailed_Jaeger" ~ "0",
+    sp == "Pacific_Loon" ~ "0",
+    sp == "Parasitic_Jaeger" ~ "0",
+    sp == "Pectoral_Sandpiper" ~ "-64.40",
+    sp == "Red_Knot" ~ "-94.05",
+    sp == "Red-throated_Loon" ~ "21.18",
+    sp == "Ruddy_Turnstone" ~ "-76.29",
+    sp == "Snow_Goose" ~ "1",
+    sp == "Tundra_Swan" ~ "1",
+    sp == "White-rumped_Sandpiper" ~ "-26.57",
+  ))
+res$perc <- as.numeric(res$perc)
+
+# Add actual trend numbers
 res <- res %>%
   mutate(perc_binomial = case_when(
     sp == "American_Golden-Plover" ~ "0",

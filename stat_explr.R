@@ -1,7 +1,7 @@
 ###
 
 
-res <- read.csv("csv/massicotte_stats/res_terra_edit.csv")
+res <- read.csv("res_terra_edit_moresp.csv")
 # Remove extra columns that pop up after exporting too many times
 library(dplyr)
 library(tidyr)
