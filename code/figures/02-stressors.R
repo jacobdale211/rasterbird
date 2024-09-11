@@ -56,7 +56,7 @@ std_ar <- sf::st_crop(std_ar, america_poly)
         xlim = c(-130, -30), ylim = c(-60, 90))
   image(p4, col = viridis::viridis(900), add = TRUE, main = NULL)
   text(x = par("usr")[1], y = par("usr")[4], labels = names[i], col = "white", adj = c(-0.2, 1.9), font = 2)
-  legendEGSL(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
+  legend.stressors(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
   
   dev.off()
  }
@@ -69,14 +69,14 @@ for (i in 9:16) {
   par(mar = c(0, 0, 0, 0))
   image(stressors[[i]], col = viridis::viridis(900), main = NULL)
   text(x = par("usr")[1], y = par("usr")[4], labels = names[i], col = "white", adj = c(-0.2, 1.9), font = 2)
-  legendEGSL(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
+  legend.stressors(range = c(0, 1), pal= viridis::viridis(100), cexMain = .75, cexSub = .5, n = 5)
   
   dev.off()
 }
 
 # america_poly <- sf::st_read("map.geojson")
 
-legendEGSL <- function (range = c(0,1),
+legend.stressors <- function (range = c(0,1),
                         pal = NULL,
                         cexMain = 1,
                         cexSub = .75,
