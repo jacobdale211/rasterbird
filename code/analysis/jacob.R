@@ -15,7 +15,7 @@ shp <- st_read(
 
 #shp <- st_crop(shp, america_poly)
 
-# shp <- st_crop(shp, america_poly)
+ shp <- st_crop(shp, america_poly)
 
 
 # Add bird range areas
@@ -24,7 +24,8 @@ shp <- shp %>%
 
 # Getting species and range names
 species <- c()
-list_num_birds <- c(1,5,7,1,3,2,1,1,10,9,1,6,2,3)
+# this list might have to be changed manually when bird ranges are updated
+list_num_birds <- c(1,5,7,1,3,1,10,2,3,1,1,2,2,4)
 list_name_birds <- c("American_Golden-Plover", "Bairds_Sandpiper","Black-bellied_Plover", "Buff-breasted_Sandpiper", "Cackling_Goose",
                      "King_Eider", "Long-tailed_Duck", "Pectoral_Sandpiper",  "Red_Knot", "Red-throated_Loon", "Ruddy_Turnstone",
                      "Snow_Goose", "Tundra_Swan", "White-rumped_Sandpiper")
