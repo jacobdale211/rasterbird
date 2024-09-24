@@ -122,8 +122,8 @@ res <- res %>%
     sp == "Red_Knot" ~ "-94.05",
     sp == "Red-throated_Loon" ~ "21.18",
     sp == "Ruddy_Turnstone" ~ "-76.29",
-    sp == "Snow_Goose" ~ "1",
-    sp == "Tundra_Swan" ~ "1",
+    sp == "Snow_Goose" ~ "477.0",
+    sp == "Tundra_Swan" ~ "3.99",
     sp == "White-rumped_Sandpiper" ~ "-26.57",
   ))
 res$perc <- as.numeric(res$perc)
