@@ -272,7 +272,7 @@ summary(modeltest2)
 
 
 
-# nixed model might work(?)
+#Mixed model might work(?)
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 data <- read.csv("res_terra_edit_moresp.csv")
 
@@ -290,48 +290,220 @@ summary(mixed_model)
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 library(vegan)
 library(tidyverse)
+library(ggplot2)
+library(ggrepel)
 
-# Read the data
 data <- read.csv("res_terra_edit_moresp.csv")
 
-# List of environmental stressors
-stressors <- c("inorganic", "invasives", "lights_halp", "ocn_pol", "plm_fert", 
+# List of environmental stressors and additional variables
+variables <- c("inorganic", "invasives", "lights_halp", "ocn_pol", "plm_fert", 
                "plm_pest", "pop_halp", "ship", "built", "croplands", "lights_vent", 
-               "navwater", "pastures", "pop_vent", "railways", "roads")
+               "navwater", "pastures", "pop_vent", "railways", "roads",
+               "range_scale", "time")
 
 # Aggregate data by species
 aggregated_data <- data %>%
   group_by(sp) %>%
-  summarize(across(all_of(stressors), mean, na.rm = TRUE),
-            perc = first(perc))  # Assuming perc is constant for each species
+  summarize(across(all_of(variables), mean, na.rm = TRUE),
+            perc = first(perc))  
+
+# Standardize all variables (including range_scale and time)
+standardized_data <- aggregated_data %>%
+  mutate(across(all_of(variables), scale)) %>%
+  mutate(across(all_of(variables), as.vector))  # Convert back to vector from matrix
 
 # Separate response variables (species trends) and explanatory variables
-species_trends <- aggregated_data %>% select(sp, perc) %>% column_to_rownames("sp")
-environmental_data <- aggregated_data %>% select(all_of(stressors))
+species_trends <- standardized_data %>% select(sp, perc) %>% column_to_rownames("sp")
+environmental_data <- standardized_data %>% select(all_of(variables))
 
-# Perform RDA
-rda_result <- rda(species_trends ~ ., data = environmental_data)
+# Perform distance-based RDA
+species_dist <- vegdist(species_trends, method = "euclidean")
+dbrda_result <- dbrda(species_dist ~ ., data = environmental_data)
 
-# Summary of RDA results
-summary(rda_result)
+# Summary of db-RDA results
+print(summary(dbrda_result))
 
-# Plot RDA results
-plot(rda_result)
-
-# Test significance of RDA result
-anova(rda_result)
+# Test significance of db-RDA result
+print(anova(dbrda_result))
 
 # Test significance of individual terms
-anova(rda_result, by = "terms")
+print(anova(dbrda_result, by = "terms"))
 
-# Calculate and print the variance inflation factors
-vif.cca(rda_result)
+# Extract site scores and species names
+site_scores <- scores(dbrda_result, display = "sites", choices = 1)
+site_scores_df <- data.frame(Species = rownames(site_scores), dbRDA1 = site_scores[,1])
 
-# Additional visualization: triplot
-# This will create a more detailed plot showing species, sites, and environmental variables
-triplot <- ordiplot(rda_result, type = "none")
-points(triplot, "sites", pch = 21, col = "black", bg = "steelblue")
-text(triplot, "species", col = "red", cex = 0.8)
-arrows(0, 0, scores(rda_result, choices = 1:2, display = "bp")[,1],
-       scores(rda_result, choices = 1:2, display = "bp")[,2],
-       col = "dark
+# Extract and scale biplot scores (variable loadings)
+biplot_scores <- scores(dbrda_result, display = "bp", choices = 1)
+biplot_scores_df <- data.frame(Variable = rownames(biplot_scores), Loading = biplot_scores[,1])
+biplot_scores_df$Loading_scaled <- biplot_scores_df$Loading / max(abs(biplot_scores_df$Loading))
+
+# Create the plot
+p <- ggplot() +
+  geom_point(data = site_scores_df, aes(x = dbRDA1, y = 0), color = "blue") +
+  geom_text_repel(data = site_scores_df, aes(x = dbRDA1, y = 0, label = Species), color = "blue", size = 3, direction = "y") +
+  geom_segment(data = biplot_scores_df, aes(x = 0, xend = Loading_scaled, y = 0, yend = 0), color = "red", arrow = arrow(length = unit(0.2, "cm"))) +
+  geom_text_repel(data = biplot_scores_df, aes(x = Loading_scaled, y = 0, label = Variable), color = "red", size = 3, direction = "y") +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+  labs(x = "dbRDA1", y = "", title = "db-RDA Plot (Single Axis)")
+
+# Print the plot
+print(p)
+
+
+
+#nmds
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+library(vegan)
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+
+# Read the data
+data <- read.csv("res_terra_edit_moresp.csv")
+
+# List of environmental stressors and additional variables
+# variables <- c("inorganic", "invasives", "lights_halp", "ocn_pol", "plm_fert", 
+#                "plm_pest", "pop_halp", "ship", "built", "croplands", "lights_vent", 
+#                "navwater", "pastures", "pop_vent", "railways", "roads",
+#                "range_scale", "time")
+
+variables <- c("lights_halp", "ocn_pol", "plm_fert", 
+               "plm_pest", "pop_halp", "croplands", "lights_vent",
+               "pop_vent")
+
+# Aggregate data by species
+aggregated_data <- data %>%
+  group_by(sp) %>%
+  summarize(across(all_of(variables), mean, na.rm = TRUE),
+            perc = first(perc))
+
+# Standardize all variables
+standardized_data <- aggregated_data %>%
+  mutate(across(all_of(c(variables, "perc")), scale)) %>%
+  mutate(across(all_of(c(variables, "perc")), as.vector))
+
+# Perform NMDS
+nmds_result <- metaMDS(standardized_data[, c(variables, "perc")], distance = "euclidean")
+
+# Extract NMDS scores
+nmds_scores <- as.data.frame(scores(nmds_result))
+nmds_scores$Species <- rownames(nmds_scores)
+
+# Fit environmental variables
+env_fit <- envfit(nmds_result, standardized_data[, variables], perm = 999)
+
+# Create a data frame of the fitted vectors
+vec_df <- as.data.frame(scores(env_fit, "vectors")) * ordiArrowMul(env_fit)
+
+# Plot
+ggplot() +
+  geom_point(data = nmds_scores, aes(x = NMDS1, y = NMDS2), color = "blue") +
+  geom_text_repel(data = nmds_scores, aes(x = NMDS1, y = NMDS2, label = Species), color = "blue") +
+  geom_segment(data = vec_df, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), 
+               arrow = arrow(length = unit(0.2, "cm")), color = "red") +
+  geom_text_repel(data = vec_df, aes(x = NMDS1, y = NMDS2, label = rownames(vec_df)), color = "red") +
+  theme_minimal() +
+  ggtitle("NMDS Plot")
+
+# Print NMDS stress value
+cat("NMDS Stress:", nmds_result$stress, "\n")
+
+# Print environmental variable correlations
+print(env_fit)
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# PCA -- Associations of environmental drivers
+library(tidyverse)
+library(FactoMineR)
+library(factoextra)
+
+data <- read.csv("res_terra_edit_moresp.csv")
+
+# List of environmental variables
+variables <- c("inorganic", "invasives", "lights_halp", "ocn_pol", "plm_fert",
+               "plm_pest", "pop_halp", "ship", "built", "croplands", "lights_vent",
+               "navwater", "pastures", "pop_vent", "railways", "roads",
+               "range_scale", "time")
+
+
+# Aggregate data by species
+aggregated_data <- data %>%
+  group_by(sp) %>%
+  summarize(across(all_of(variables), mean, na.rm = TRUE),
+            perc = first(perc))
+
+# Perform PCA
+pca_result <- PCA(aggregated_data[, variables], graph = FALSE)
+
+# Scree plot
+fviz_eig(pca_result, addlabels = TRUE)
+
+# Variables plot
+fviz_pca_var(pca_result, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+
+# Individuals plot (species)
+fviz_pca_ind(pca_result, col.ind = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+
+# Biplot
+fviz_pca_biplot(pca_result, repel = TRUE,
+                col.var = "#2E9FDF", 
+                col.ind = "#696969"  
+)
+
+# Print summary of PCA
+print(summary(pca_result))
+
+# Correlation of variables with principal components
+print(pca_result$var$cor)
+
+# Contribution of variables to principal components
+print(pca_result$var$contrib)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Supplementary RDA
+# We only have one response variable ... the assumption of RDA is that we have multiple
+# response variables ...
+library(vegan)
+
+# Prepare data
+env_data <- aggregated_data[, variables]
+response <- aggregated_data$perc
+
+# Perform RDA
+rda_result <- rda(response ~ ., data = env_data)
+
+# Plot RDA results
+plot(rda_result, scaling = 2)
+
+# Test significance
+anova(rda_result)
+
+# Look at the proportion of variance explained
+summary(rda_result)
+
+
+#~~~~~~~~~~~~~ Okay, instead of RDA on PCA lets try supp. PCA
+
+library(FactoMineR)
+library(factoextra)
+
+# Perform PCA
+pca_result <- PCA(aggregated_data[, variables], graph = FALSE)
+
+# Add perc as a supplementary quantitative variable
+pca_with_perc <- PCA(aggregated_data[, variables], graph = FALSE, 
+                     quanti.sup = which(colnames(aggregated_data) == "perc"))
+
+# Visualize
+fviz_pca_biplot(pca_with_perc, repel = TRUE,
+                col.var = "blue", # Environmental variables
+                col.ind = "gray", # Species
+                col.quanti.sup = "red") # Percent trend
+

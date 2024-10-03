@@ -74,9 +74,9 @@ calculate_stats <- function(data, value_column, group_column1, group_column2, gr
 result_inorganic <- calculate_stats(res, value_column = inorganic, 
                           group_column1 = sp, group_column2 = range_scale, group_column3 = range, 
                           group_column4 = perc_binomial, group_column5 = time)
-model <- lme4::glmer(perc_binomial ~  mean  + range_scale + (1|sp), data = result_inorganic, family = "binomial", weights = time)
+model <- lme4::glmer(perc_binomial ~  max  + range_scale + (1|sp), data = result_inorganic, family = "binomial", weights = time)
 summary(model)
-hist(result_inorganic$mean)
+hist(result_inorganic$max)
 scatter.smooth(result$mean, result$perc_binomial, main = "Inorganic pollution")
 performance::r2(model)
 visreg(model)

@@ -85,15 +85,14 @@ res <- res %>%
     plm_fert = value.4,
     plm_pest = value.5,
     pop_halp = value.6,
-    ship = value.7,
-    built = value.8,
-    croplands = value.9,
-    lights_vent = value.10,
-    navwater = value.11,
-    pastures  = value.12,
-    pop_vent = value.13,
-    railways = value.14,
-    roads = value.15
+    built = value.7,
+    croplands = value.8,
+    lights_vent = value.9,
+    navwater = value.10,
+    pastures  = value.11,
+    pop_vent = value.12,
+    railways = value.13,
+    roads = value.14
   )
 
 # Seperate species from range number

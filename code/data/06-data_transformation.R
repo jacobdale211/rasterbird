@@ -26,7 +26,7 @@ stressor_names <- c(
 # Selecting most updated stressors
 stressor_names_new <- c(
  "Built2009", "croplands2005", "2013-inorganic", "2013-invasives","2013-night_lights", "2013-ocean_pollution", "2013-plumes_fert",
- "2013-plumes_pest", "2013-population", "2013-shipping","Lights2009","NavWater2009","Pasture2009","Popdensity2010", "Railways", "Roads")
+ "2013-plumes_pest", "2013-population", "Lights2009","NavWater2009","Pasture2009","Popdensity2010", "Railways", "Roads")
 
 dat <- list()
 for(i in 1:length(stressor_names_new)) {

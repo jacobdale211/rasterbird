@@ -29,11 +29,11 @@ sp <- c(
 )
 
 # Removed
-"Common-ringed Plover" # no data in study area
-# Temp removal, no trend data
-"Bairds Sandpiper"
-"Glaucous Gull"
-"Pacific Loon"
+# "Common-ringed Plover" # no data in study area
+# # Temp removal, no trend data
+# "Bairds Sandpiper"
+# "Glaucous Gull"
+# "Pacific Loon"
 
 
 # Select only birds of interest 
