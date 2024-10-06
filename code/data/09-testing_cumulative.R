@@ -1,8 +1,8 @@
 on.exit(sf::sf_use_s2(TRUE), add = TRUE)
 sf::sf_use_s2(FALSE)
 
-# FOR SINGLE DRIVERS AT A TIME
-cumul <- stars::read_stars("data/data-stressors/terrestrial_human_footprint_venter-103a233e-croplands2005.tif")
+# FOR CUMULATIVE DRIVERS
+cumul <- stars::read_stars("data/data-cumulative_stressors/cumulative_stressors.tif")
 
 # v <- read.csv("data/data-format/v-matrix.csv")
 
@@ -40,11 +40,14 @@ for(i in 1:length(l)) {
 
 means <- lapply(m, mean, na.rm = TRUE) |> unlist()
 sds <- lapply(m, sd, na.rm = TRUE) |> unlist()
+maxs <- lapply(m, max, na.rm = TRUE) |> unlist()
+
 
 dat <- data.frame(
   bird = species, 
   exposure_mean = means,
-  exposure_sd = sds
+  exposure_sd = sds,
+  exposure_max = maxs
   )
 
 # Joining exposure and Rosenberg data
@@ -56,7 +59,7 @@ alldat <- dplyr::left_join(
   by = c("bird" = "species")
 ) |>
  na.omit()
-
+write.csv(alldat, "OG_an_stats.csv")
 # Rework exposure mean with vulnerability matrix (tabled til vulnerability rework)
 # v[,5] <- as.numeric(v[,5])
 # alldat$exposure_mean <- as.numeric(alldat$exposure_mean)

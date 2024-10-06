@@ -51,7 +51,6 @@ shp$species <- species
 extract_bird_data <- function(raster_file, shp) {
   r <- rast(raster_file)
   plot(shp)
-  # plot(shp_buf)
 
   res <- exact_extract(r, shp, include_cols = c("species","range_size"), include_xy = TRUE)
 
@@ -71,7 +70,7 @@ write.csv(res, "res_terra_moresp.csv")
 
 
 
-res <- read.csv("res_terra_moresp.csv")
+res <- read.csv("csvs/res_terra_moresp.csv")
 
 # Clean up new format
 library(dplyr)

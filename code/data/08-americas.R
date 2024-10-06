@@ -18,6 +18,7 @@ uid <- c(
   "halpern_cea-4f84f0e3-2013-night_lights",
   "halpern_cea-4f84f0e3-2013-plumes_fert",
   "halpern_cea-4f84f0e3-2013-plumes_pest",
+  "halpern_cea-4f84f0e3-2013-ocean_pollution",
   "halpern_cea-4f84f0e3-2013-population",
   "terrestrial_human_footprint_venter-103a233e-Built2009",
   "terrestrial_human_footprint_venter-103a233e-croplands2005",
@@ -101,7 +102,7 @@ if(!file.exists(output2)) dir.create(output2, recursive = TRUE)
 dat <- stars::read_stars(here::here(output2, "cumulative_stressors.tif"))
  dat[[1]][dat[[1]] <= 0] <- NA
 brange = sf::st_read("./data/data-raw/birdlife/birds_multistress/Bylot_non_breeding_range.shp")
-a_f <- sf::st_read("a_f.gpkg")
+#a_f <- sf::st_read("a_f.gpkg")
 
   out <- "figures/" 
   if(!file.exists(out)) dir.create(out, recursive = TRUE)         

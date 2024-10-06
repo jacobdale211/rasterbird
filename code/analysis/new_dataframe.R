@@ -12,6 +12,32 @@ for (file in files) {
   p[[file]] <- polygon
 }
 
+
+
+#--------------------------------------------------------------------
+library(dplyr)
+df <- read.csv("csvs/sumsts_noshpg.csv")
+
+# Clean up the species names by removing underscores
+df <- df %>%
+  mutate(sp = gsub("_", " ", sp))
+
+# Group by species and summarize
+result <- df %>%
+  group_by(sp) %>%
+  summarize(total_mean = sum(mean, na.rm = TRUE)) %>%
+  arrange(desc(total_mean))
+#--------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 # (Fine for the moment because I know the orientation of the files, but I will change it in the future)
 # Remove 2 (Bairds, no pop trends)
 # p <- p[-2]
