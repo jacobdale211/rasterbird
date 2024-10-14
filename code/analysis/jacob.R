@@ -150,6 +150,29 @@ res <- res %>%
   ))
 res$perc_binomial <- as.numeric(res$perc_binomial)
 
+# Add bird type
+res <- res %>%
+  mutate(type = case_when(
+    sp == "American_Golden-Plover" ~ "shorebird",
+    sp == "Bairds_Sandpiper" ~ "shorebird",
+    sp == "Black-bellied_Plover" ~ "shorebird",
+    sp == "Buff-breasted_Sandpiper" ~ "shorebird",
+    sp == "Cackling_Goose" ~ "waterfowl",
+    sp == "Glaucous_Gull" ~ "1",
+    sp == "King_Eider" ~ "waterfowl",
+    sp == "Long-tailed_Duck" ~ "waterfowl",
+    sp == "Long-tailed_Jaeger" ~ "1",
+    sp == "Pacific_Loon" ~ "1",
+    sp == "Parasitic_Jaeger" ~ "1",
+    sp == "Pectoral_Sandpiper" ~ "shorebird",
+    sp == "Red_Knot" ~ "shorebird",
+    sp == "Red-throated_Loon" ~ "waterfowl",
+    sp == "Ruddy_Turnstone" ~ "shorebird",
+    sp == "Snow_Goose" ~ "waterfowl",
+    sp == "Tundra_Swan" ~ "waterfowl",
+    sp == "White-rumped_Sandpiper" ~ "shorebird",
+  ))
+
 # Add time at range
 res <- res %>%
   mutate(time = case_when(

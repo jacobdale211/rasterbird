@@ -17,7 +17,6 @@ names <- c(
   "Fertilizer plumes",
   "Pesticide plumes",
   "Population density (Halpern)",
-  "Shipping",
   "Urban Environments",
   "Croplands",
   "Light pollution (Venter)",
@@ -40,7 +39,7 @@ std_ar <- subset(world, continent %in% c("North America", "South America"))
 std_ar <- sf::st_crop(std_ar, america_poly)
 
 #halpern
- for (i in 1:8) {
+ for (i in 1:7) {
    input <- names[[i]]
    x <- stressors[[i]]
    x[x==0]<-NA
@@ -61,7 +60,7 @@ std_ar <- sf::st_crop(std_ar, america_poly)
   dev.off()
  }
 #venter
-for (i in 9:16) {
+for (i in 8:15) {
   input <- names[[i]]
   
   png(file = glue::glue("figures/stressors/{input}.png"),width = 800, height = 600, units = "px", res = 150)

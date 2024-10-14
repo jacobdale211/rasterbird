@@ -15,18 +15,17 @@ for (file in files) {
 
 
 #--------------------------------------------------------------------
+# extracting values for final table
 library(dplyr)
 df <- read.csv("csvs/sumsts_noshpg.csv")
 
-# Clean up the species names by removing underscores
 df <- df %>%
   mutate(sp = gsub("_", " ", sp))
 
-# Group by species and summarize
 result <- df %>%
   group_by(sp) %>%
-  summarize(total_mean = sum(mean, na.rm = TRUE)) %>%
-  arrange(desc(total_mean))
+  summarize(total_sd = sum(sd, na.rm = TRUE)) %>%
+  arrange(desc(total_sd))
 #--------------------------------------------------------------------
 
 

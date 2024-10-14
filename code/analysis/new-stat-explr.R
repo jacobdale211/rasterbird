@@ -77,7 +77,6 @@ lm_stats <- function(x, y, species, stressor) {
   return(c(p_value = p_value, r_squared = r_squared, reason = "Success"))
 }
 
-# Initialize an empty dataframe to store results
 results <- data.frame(species = character(),
                       stressor = character(),
                       p_value = numeric(),
