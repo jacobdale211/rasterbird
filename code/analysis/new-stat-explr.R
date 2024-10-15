@@ -422,7 +422,7 @@ data <- read.csv("res_terra_edit_moresp.csv")
 
 # List of environmental variables
 variables <- c("inorganic", "invasives", "lights_halp", "ocn_pol", "plm_fert",
-               "plm_pest", "pop_halp", "ship", "built", "croplands", "lights_vent",
+               "plm_pest", "pop_halp", "built", "croplands", "lights_vent",
                "navwater", "pastures", "pop_vent", "railways", "roads",
                "range_scale", "time")
 
