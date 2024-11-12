@@ -11,7 +11,6 @@ data/data-format
 data/data-grid
 data/data-raw
 my_plot
-figures
 data/data-stressors/
 delete.R
 ouput 
